@@ -1,0 +1,16 @@
+{
+  "decoder_dropout_rate": 0.1,
+  "decoder_input_dropout_rate": 0.2,
+  "decoder_layer_number": 2,
+  "embedding_size": 256,
+  "encoder_dropout_rate": 0.2,
+  "encoder_input_dropout_rate": 0.1,
+  "encoder_layer_number": 2,
+  "eng_id": 7,
+  "eos_id": 5,
+  "hidden_size": 256,
+  "max_segment_length": 3,
+  "num_id": 3,
+  "punc_id": 2,
+  "vocab_size": 8677
+}

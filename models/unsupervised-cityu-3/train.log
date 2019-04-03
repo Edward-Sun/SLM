@@ -1,0 +1,810 @@
+2019-04-03 14:19:10 INFO     Namespace(adam_learning_rate=0.005, bos_token='<BOS>', config_file='models/slm_cityu_3_config.json', cpu_num=4, do_predict=True, do_supervised=False, do_unsupervised=True, do_valid=True, english_token='<ENG>', eos_token='</s>', gradient_clip=0.1, init_checkpoint=None, init_embedding_path='data/vocab/embedding.npy', log_every_steps=100, max_seq_length=32, number_token='<NUM>', predict_batch_size=500, predict_inputs=['data/cityu/test.txt'], predict_output='models/unsupervised-cityu-3/prediction.txt', punctuation_token='<PUNC>', save_every_steps=400, save_path='models/unsupervised-cityu-3', segment_token='  ', segmented=None, sgd_learning_rate=16.0, supervised_batch_size=1000, supervised_lambda=1.0, train_steps=6000, unsegmented=['data/cityu/unsegmented.txt', 'data/cityu/test.txt'], unsupervised_batch_size=16000, use_cuda=True, valid_batch_size=500, valid_inputs=['data/cityu/test.txt'], valid_output='models/unsupervised-cityu-3/valid_prediction.txt', vocab_file='data/vocab/vocab.txt', warm_up_steps=800)
+2019-04-03 14:19:10 INFO     Loading init embedding from data/vocab/embedding.npy...
+2019-04-03 14:19:10 INFO     Config Info:
+{
+  "decoder_dropout_rate": 0.1,
+  "decoder_input_dropout_rate": 0.3,
+  "decoder_layer_number": 2,
+  "embedding_size": 256,
+  "encoder_dropout_rate": 0.1,
+  "encoder_input_dropout_rate": 0.1,
+  "encoder_layer_number": 2,
+  "eng_id": 7,
+  "eos_id": 5,
+  "hidden_size": 256,
+  "max_segment_length": 3,
+  "num_id": 3,
+  "punc_id": 2,
+  "vocab_size": 8677
+}
+2019-04-03 14:19:10 INFO     Model Info:
+SegmentalLM(
+  (embedding): Embedding(8677, 256)
+  (embedding2vocab): Linear(in_features=256, out_features=8677, bias=True)
+  (context_encoder): ContextEncoder(
+    (rnn): LSTM(256, 256, num_layers=2, dropout=0.1)
+  )
+  (segment_decoder): SegmentDecoder(
+    (rnn): LSTM(256, 256, num_layers=2, dropout=0.1)
+    (output_dropout): Dropout(p=0.1)
+  )
+  (decoder_h_transformation): Linear(in_features=256, out_features=512, bias=True)
+  (encoder_input_dropout): Dropout(p=0.1)
+  (decoder_input_dropout): Dropout(p=0.3)
+  (y0_transformation): Linear(in_features=256, out_features=256, bias=True)
+)
+2019-04-03 14:19:15 INFO     Prepare unsupervised dataloader
+2019-04-03 14:19:22 INFO     #line: 54512
+2019-04-03 14:19:22 INFO     #sentence: 174094
+2019-04-03 14:19:22 INFO     #token: 2751794
+2019-04-03 14:19:23 INFO     ##########Example 0##########
+2019-04-03 14:19:23 INFO     Characters: <BOS> 立 会 选 情 告 一 段 落 民 主 进 程 还 看 明 天 <\n>
+2019-04-03 14:19:23 INFO     Tokens: <BOS> 立 会 选 情 告 一 段 落 民 主 进 程 还 看 明 天 </s>
+2019-04-03 14:19:23 INFO     Segments: 16
+2019-04-03 14:19:23 INFO     ##########Example 1##########
+2019-04-03 14:19:23 INFO     Characters: <BOS> 立 法 会 选 举 出 现 了 戏 剧 性 的 结 果 ， 
+2019-04-03 14:19:23 INFO     Tokens: <BOS> 立 法 会 选 举 出 现 了 戏 剧 性 的 结 果 <PUNC> </s>
+2019-04-03 14:19:23 INFO     Segments: 15
+2019-04-03 14:19:23 INFO     ##########Example 2##########
+2019-04-03 14:19:23 INFO     Characters: <BOS> 尽 管 投 票 率 创 下 新 高 ， 
+2019-04-03 14:19:23 INFO     Tokens: <BOS> 尽 管 投 票 率 创 下 新 高 <PUNC> </s>
+2019-04-03 14:19:23 INFO     Segments: 10
+2019-04-03 14:19:23 INFO     ##########Example 3##########
+2019-04-03 14:19:23 INFO     Characters: <BOS> 而 过 去 经 验 显 示 高 投 票 率 对 民 主 派 较 有 利 ， 
+2019-04-03 14:19:23 INFO     Tokens: <BOS> 而 过 去 经 验 显 示 高 投 票 率 对 民 主 派 较 有 利 <PUNC> </s>
+2019-04-03 14:19:23 INFO     Segments: 19
+2019-04-03 14:19:23 INFO     ##########Example 4##########
+2019-04-03 14:19:23 INFO     Characters: <BOS> 但 由 于 名 单 协 调 不 当 及 配 票 策 略 失 误 ， 
+2019-04-03 14:19:23 INFO     Tokens: <BOS> 但 由 于 名 单 协 调 不 当 及 配 票 策 略 失 误 <PUNC> </s>
+2019-04-03 14:19:23 INFO     Segments: 17
+2019-04-03 14:19:23 INFO     ##########Example 5##########
+2019-04-03 14:19:23 INFO     Characters: <BOS> 加 上 丑 闻 影 响 选 情 ， 
+2019-04-03 14:19:23 INFO     Tokens: <BOS> 加 上 丑 闻 影 响 选 情 <PUNC> </s>
+2019-04-03 14:19:23 INFO     Segments: 9
+2019-04-03 14:19:23 INFO     ##########Example 6##########
+2019-04-03 14:19:23 INFO     Characters: <BOS> 民 主 党 的 议 席 比 上 一 届 减 少 ， 
+2019-04-03 14:19:23 INFO     Tokens: <BOS> 民 主 党 的 议 席 比 上 一 届 减 少 <PUNC> </s>
+2019-04-03 14:19:23 INFO     Segments: 13
+2019-04-03 14:19:23 INFO     ##########Example 7##########
+2019-04-03 14:19:23 INFO     Characters: <BOS> 由 第 一 大 党 跌 至 第 三 ； <\n>
+2019-04-03 14:19:23 INFO     Tokens: <BOS> 由 第 一 大 党 跌 至 第 三 <PUNC> </s>
+2019-04-03 14:19:23 INFO     Segments: 10
+2019-04-03 14:19:23 INFO     ##########Example 8##########
+2019-04-03 14:19:23 INFO     Characters: <BOS> 而 泛 民 主 派 在 30 席 普 选 中 亦 只 能 取 得 18 席 ， 
+2019-04-03 14:19:23 INFO     Tokens: <BOS> 而 泛 民 主 派 在 <NUM> 席 普 选 中 亦 只 能 取 得 <NUM> 席 <PUNC> </s>
+2019-04-03 14:19:23 INFO     Segments: 19
+2019-04-03 14:19:23 INFO     ##########Example 9##########
+2019-04-03 14:19:23 INFO     Characters: <BOS> 比 选 前 预 期 的 20 席 少 ； <\n>
+2019-04-03 14:19:23 INFO     Tokens: <BOS> 比 选 前 预 期 的 <NUM> 席 少 <PUNC> </s>
+2019-04-03 14:19:23 INFO     Segments: 10
+2019-04-03 14:19:24 INFO     Bucket batch sizes: 2000,1454,1230,1066,941,800,640,500
+2019-04-03 14:19:24 INFO     Prepare validation dataloader
+2019-04-03 14:19:24 INFO     #line: 1493
+2019-04-03 14:19:24 INFO     #sentence: 4827
+2019-04-03 14:19:24 INFO     #token: 75548
+2019-04-03 14:19:24 INFO     ##########Example 0##########
+2019-04-03 14:19:24 INFO     Characters: <BOS> 「 练 得 铜 皮 铁 骨 」 露 宿 早 惯 蚊 叮 <\n>
+2019-04-03 14:19:24 INFO     Tokens: <BOS> <PUNC> 练 得 铜 皮 铁 骨 <PUNC> 露 宿 早 惯 蚊 叮 </s>
+2019-04-03 14:19:24 INFO     Segments: 14
+2019-04-03 14:19:24 INFO     ##########Example 1##########
+2019-04-03 14:19:24 INFO     Characters: <BOS> 本 港 约 有 450 至 600 名 露 宿 者 ， 
+2019-04-03 14:19:24 INFO     Tokens: <BOS> 本 港 约 有 <NUM> 至 <NUM> 名 露 宿 者 <PUNC> </s>
+2019-04-03 14:19:24 INFO     Segments: 12
+2019-04-03 14:19:24 INFO     ##########Example 2##########
+2019-04-03 14:19:24 INFO     Characters: <BOS> 其 中 近 四 分 之 一 ， 
+2019-04-03 14:19:24 INFO     Tokens: <BOS> 其 中 近 四 分 之 一 <PUNC> </s>
+2019-04-03 14:19:24 INFO     Segments: 8
+2019-04-03 14:19:24 INFO     ##########Example 3##########
+2019-04-03 14:19:24 INFO     Characters: <BOS> 即 约 150 人 露 宿 在 深 水 埗 。 <\n>
+2019-04-03 14:19:24 INFO     Tokens: <BOS> 即 约 <NUM> 人 露 宿 在 深 水 埗 <PUNC> </s>
+2019-04-03 14:19:24 INFO     Segments: 11
+2019-04-03 14:19:24 INFO     ##########Example 4##########
+2019-04-03 14:19:24 INFO     Characters: <BOS> 有 外 展 社 工 称 ， 
+2019-04-03 14:19:24 INFO     Tokens: <BOS> 有 外 展 社 工 称 <PUNC> </s>
+2019-04-03 14:19:24 INFO     Segments: 7
+2019-04-03 14:19:24 INFO     ##########Example 5##########
+2019-04-03 14:19:24 INFO     Characters: <BOS> 露 宿 者 日 间 多 到 商 场 等 冷 气 场 所 避 暑 ， 
+2019-04-03 14:19:24 INFO     Tokens: <BOS> 露 宿 者 日 间 多 到 商 场 等 冷 气 场 所 避 暑 <PUNC> </s>
+2019-04-03 14:19:24 INFO     Segments: 17
+2019-04-03 14:19:24 INFO     ##########Example 6##########
+2019-04-03 14:19:24 INFO     Characters: <BOS> 流 连 至 晚 上 11 、 12 时 ， 
+2019-04-03 14:19:24 INFO     Tokens: <BOS> 流 连 至 晚 上 <NUM> <PUNC> <NUM> 时 <PUNC> </s>
+2019-04-03 14:19:24 INFO     Segments: 10
+2019-04-03 14:19:24 INFO     ##########Example 7##########
+2019-04-03 14:19:24 INFO     Characters: <BOS> 才 用 纸 皮 在 公 园 外 「 打 地 铺 」  ， 
+2019-04-03 14:19:24 INFO     Tokens: <BOS> 才 用 纸 皮 在 公 园 外 <PUNC> 打 地 铺 <PUNC> </s>
+2019-04-03 14:19:24 INFO     Segments: 13
+2019-04-03 14:19:24 INFO     ##########Example 8##########
+2019-04-03 14:19:24 INFO     Characters: <BOS> 他 们 早 已 「 练 得 一 身 铜 皮 铁 骨 」  ， 
+2019-04-03 14:19:24 INFO     Tokens: <BOS> 他 们 早 已 <PUNC> 练 得 一 身 铜 皮 铁 骨 <PUNC> </s>
+2019-04-03 14:19:24 INFO     Segments: 14
+2019-04-03 14:19:24 INFO     ##########Example 9##########
+2019-04-03 14:19:24 INFO     Characters: <BOS> 彻 夜 被 蚊 叮 也 习 以 为 常 ， 
+2019-04-03 14:19:24 INFO     Tokens: <BOS> 彻 夜 被 蚊 叮 也 习 以 为 常 <PUNC> </s>
+2019-04-03 14:19:24 INFO     Segments: 11
+2019-04-03 14:19:24 INFO     Ramdomly Initializing SLM parameters...
+2019-04-03 14:19:25 INFO     global_step = 0
+2019-04-03 14:19:25 INFO     unsupervised_loss = 15.592890
+2019-04-03 14:19:26 INFO     Saving checkpoint models/unsupervised-cityu-3...
+2019-04-03 14:19:30 INFO     Bash Command: bash run.sh valid cityu 3
+2019-04-03 14:19:33 INFO     Validation results:
+1.0.0
+=== SUMMARY:
+=== TOTAL INSERTIONS:	24919
+=== TOTAL DELETIONS:	114
+=== TOTAL SUBSTITUTIONS:	21431
+=== TOTAL NCHANGE:	46464
+=== TOTAL TRUE WORD COUNT:	40936
+=== TOTAL TEST WORD COUNT:	65741
+=== TOTAL TRUE WORDS RECALL:	0.474
+=== TOTAL TEST WORDS PRECISION:	0.295
+=== F MEASURE:	0.364
+=== OOV Rate:	1.000
+=== OOV Recall Rate:	0.474
+=== IV Recall Rate:	--
+Examples:
+「  练  得  铜  皮  铁  骨  」  露  宿  早  惯  蚊  叮  
+本  港  约  有  450  至  600  名露  宿者  ，  其  中  近  四  分  之  一  ，  即  约  150  人  露  宿  在  深  水  埗  。  
+有  外  展  社  工称  ，  露  宿者  日  间  多  到  商  场  等  冷  气  场  所  避  暑  ，  流  连  至  晚  上  11  、  12  时  ，  才  用  纸  皮  在  公  园  外  「  打  地  铺  」  ，  他  们  早  已  「  练  得  一  身  铜  皮  铁  骨  」  ，  彻  夜  被  蚊  叮  也  习  以  为  常  ，  但  社  工  在  炎  夏  仍  会  频  频  给  他  们  派  发  蚊  香  。  
+基  督  教  关  怀  无  家  者  协  会  的  外  展  社  工  ，  过  去  一  直  有  探  访  李  郑  屋  游  乐  场  外  的  露  宿者  ，  该  会  总  干  事  赖  淑  芬  说  ，  该  处  的  露  宿者  只  有  数  人  ，  且  流  动  性  很  大  。  
+不  管  被  多  少  蚊  叮  也  没  什  感  觉  
+她  指  这  些  露  宿者  日  间  都  会  流  连  于  冷  气  场  所  ，  晚  上  才  到  游  乐  场露  宿  ，  但  碍  于  游  乐  场  晚  上  关  门  ，  他  们  只  可  在  外  围  「  打  地  铺  」  。  
+由  于  附  近  多  草  丛  ，  晚  上  人  流  少  ，  部  分  露  宿者  又  因  为  个  人  卫生  问  题  ，  总  成  为  蚊  叮  对  象  。  
+但  露  宿者  早  已  习  惯  被  蚊  叮  ，  不  管  被  多  少  蚊  叮  也  没  什  感  觉  。  
+不  过  ，  有  些  露  宿者  一  样  被  蚊  叮  至  痕  痒  入  心  ，  要  不  断  换  位  找  个  较  少  蚊  的  地  方  睡  觉  ，  故  彻  夜  难  眠  。  
+赖  淑  芬  指  区  内  露  宿者  之  家  经  常  「  爆  满  」  ，  他  们  未  必  有  位  入  住  ﹔  
+
+2019-04-03 14:19:33 INFO     Saving best checkpoint....
+2019-04-03 14:20:09 INFO     global_step = 100
+2019-04-03 14:20:09 INFO     unsupervised_loss = 8.933683
+2019-04-03 14:20:45 INFO     global_step = 200
+2019-04-03 14:20:45 INFO     unsupervised_loss = 6.437728
+2019-04-03 14:21:21 INFO     global_step = 300
+2019-04-03 14:21:21 INFO     unsupervised_loss = 5.775924
+2019-04-03 14:21:56 INFO     global_step = 400
+2019-04-03 14:21:56 INFO     unsupervised_loss = 5.503101
+2019-04-03 14:21:57 INFO     Saving checkpoint models/unsupervised-cityu-3...
+2019-04-03 14:22:01 INFO     Bash Command: bash run.sh valid cityu 3
+2019-04-03 14:22:04 INFO     Validation results:
+1.0.0
+=== SUMMARY:
+=== TOTAL INSERTIONS:	1273
+=== TOTAL DELETIONS:	4536
+=== TOTAL SUBSTITUTIONS:	8503
+=== TOTAL NCHANGE:	14312
+=== TOTAL TRUE WORD COUNT:	40936
+=== TOTAL TEST WORD COUNT:	37673
+=== TOTAL TRUE WORDS RECALL:	0.681
+=== TOTAL TEST WORDS PRECISION:	0.741
+=== F MEASURE:	0.710
+=== OOV Rate:	1.000
+=== OOV Recall Rate:	0.681
+=== IV Recall Rate:	--
+Examples:
+「  练得  铜皮  铁骨  」  露宿早  惯蚊叮  
+本港  约有  450  至  600  名  露宿者  ，  其中  近四  分之一  ，  即  约  150  人  露宿  在  深水埗  。  
+有  外展  社工称  ，  露宿者  日间  多到  商场等  冷气  场所  避暑  ，  流连  至  晚上  11  、  12  时  ，  才用  纸皮  在  公园  外  「  打  地铺  」  ，  他  们  早已  「  练得  一身铜  皮铁骨  」  ，  彻夜  被  蚊叮  也习  以为  常  ，  但  社工  在  炎夏  仍会  频频给  他  们  派发  蚊香  。  
+基督教  关怀  无家  者  协会的  外展  社工  ，  过去  一直  有  探访李  郑屋  游乐  场外  的  露宿者  ，  该会  总干事  赖淑芬  说  ，  该处的  露宿者  只有  数人  ，  且  流动  性  很大  。  
+不管  被  多少  蚊叮  也没什  感觉  
+她指  这些  露宿者  日间  都会  流连  于  冷气  场所  ，  晚上  才到  游乐  场  露宿  ，  但  碍于  游乐场  晚上  关门  ，  他  们  只  可  在  外围  「  打  地铺  」  。  
+由于  附近  多  草丛  ，  晚上  人流  少  ，  部分  露宿者  又  因为  个人  卫生  问题  ，  总成为  蚊叮  对象  。  
+但  露宿者  早已  习惯  被  蚊叮  ，  不管  被  多少  蚊叮  也没什  感觉  。  
+不过  ，  有些  露宿者  一样  被  蚊叮  至  痕痒  入心  ，  要  不断  换位  找个  较少  蚊的  地方  睡觉  ，  故  彻夜  难眠  。  
+赖淑芬  指  区内  露宿者  之家  经常  「  爆满  」  ，  他  们  未必  有位  入住  ﹔  
+
+2019-04-03 14:22:04 INFO     Saving best checkpoint....
+2019-04-03 14:22:39 INFO     global_step = 500
+2019-04-03 14:22:39 INFO     unsupervised_loss = 5.385266
+2019-04-03 14:23:15 INFO     global_step = 600
+2019-04-03 14:23:15 INFO     unsupervised_loss = 5.295470
+2019-04-03 14:23:50 INFO     global_step = 700
+2019-04-03 14:23:50 INFO     unsupervised_loss = 5.196834
+2019-04-03 14:24:27 INFO     global_step = 800
+2019-04-03 14:24:27 INFO     unsupervised_loss = 5.142625
+2019-04-03 14:24:28 INFO     Saving checkpoint models/unsupervised-cityu-3...
+2019-04-03 14:24:32 INFO     Bash Command: bash run.sh valid cityu 3
+2019-04-03 14:24:35 INFO     Validation results:
+1.0.0
+=== SUMMARY:
+=== TOTAL INSERTIONS:	1341
+=== TOTAL DELETIONS:	3847
+=== TOTAL SUBSTITUTIONS:	7158
+=== TOTAL NCHANGE:	12346
+=== TOTAL TRUE WORD COUNT:	40936
+=== TOTAL TEST WORD COUNT:	38430
+=== TOTAL TRUE WORDS RECALL:	0.731
+=== TOTAL TEST WORDS PRECISION:	0.779
+=== F MEASURE:	0.754
+=== OOV Rate:	1.000
+=== OOV Recall Rate:	0.731
+=== IV Recall Rate:	--
+Examples:
+「  练得  铜皮  铁骨  」  露宿早  惯蚊叮  
+本港  约有  450  至  600  名  露宿者  ，  其中  近四  分之一  ，  即约  150  人  露宿  在  深水  埗  。  
+有  外展  社工称  ，  露宿者  日间  多到  商场  等  冷气  场所  避暑  ，  流连至  晚上  11  、  12  时  ，  才  用  纸皮  在  公园  外  「  打  地铺  」  ，  他  们  早已  「  练得  一身  铜皮  铁骨  」  ，  彻夜  被  蚊叮  也习  以为  常  ，  但  社工  在  炎夏  仍会  频频  给  他们  派发  蚊香  。  
+基督教  关怀  无家  者  协会  的  外展  社工  ，  过去  一直  有  探访李  郑屋  游乐  场外  的  露宿者  ，  该会  总干事  赖淑芬  说  ，  该处  的  露宿者  只有  数人  ，  且  流动  性  很大  。  
+不管  被  多少  蚊叮  也没什  感觉  
+她  指  这些  露宿者  日间  都会  流连  于  冷气  场所  ，  晚上  才到  游乐  场露宿  ，  但  碍于  游乐  场  晚上  关门  ，  他  们  只可  在  外围  「  打  地铺  」  。  
+由于  附近  多  草丛  ，  晚上  人流  少  ，  部分  露宿者  又  因为  个人  卫生  问题  ，  总成为  蚊叮  对象  。  
+但  露宿者  早已  习惯  被  蚊叮  ，  不管  被  多少  蚊叮  也没什  感觉  。  
+不过  ，  有些  露宿者  一样  被  蚊叮  至  痕痒  入心  ，  要  不断  换位  找个  较少  蚊的  地方  睡觉  ，  故  彻夜  难眠  。  
+赖淑芬  指  区内  露宿者  之家  经常  「  爆满  」  ，  他  们  未必  有位  入住  ﹔  
+
+2019-04-03 14:24:35 INFO     Saving best checkpoint....
+2019-04-03 14:25:10 INFO     global_step = 900
+2019-04-03 14:25:10 INFO     unsupervised_loss = 5.063081
+2019-04-03 14:25:46 INFO     global_step = 1000
+2019-04-03 14:25:46 INFO     unsupervised_loss = 4.948619
+2019-04-03 14:26:23 INFO     global_step = 1100
+2019-04-03 14:26:23 INFO     unsupervised_loss = 4.856647
+2019-04-03 14:27:00 INFO     global_step = 1200
+2019-04-03 14:27:00 INFO     unsupervised_loss = 4.751838
+2019-04-03 14:27:00 INFO     Saving checkpoint models/unsupervised-cityu-3...
+2019-04-03 14:27:04 INFO     Bash Command: bash run.sh valid cityu 3
+2019-04-03 14:27:07 INFO     Validation results:
+1.0.0
+=== SUMMARY:
+=== TOTAL INSERTIONS:	2253
+=== TOTAL DELETIONS:	2526
+=== TOTAL SUBSTITUTIONS:	6444
+=== TOTAL NCHANGE:	11223
+=== TOTAL TRUE WORD COUNT:	40936
+=== TOTAL TEST WORD COUNT:	40663
+=== TOTAL TRUE WORDS RECALL:	0.781
+=== TOTAL TEST WORDS PRECISION:	0.786
+=== F MEASURE:	0.783
+=== OOV Rate:	1.000
+=== OOV Recall Rate:	0.781
+=== IV Recall Rate:	--
+Examples:
+「  练  得铜  皮铁骨  」  露宿  早惯  蚊叮  
+本港  约有  450  至  600  名  露宿  者  ，  其中  近四  分之  一  ，  即  约  150  人  露宿  在  深水  埗  。  
+有  外展  社工  称  ，  露宿  者  日间  多  到  商场  等  冷气  场所  避暑  ，  流连至  晚上  11  、  12  时  ，  才  用  纸皮  在  公园  外  「  打  地铺  」  ，  他  们  早已  「  练得  一身  铜皮  铁骨  」  ，  彻夜  被  蚊叮  也习  以  为  常  ，  但  社工  在  炎夏  仍  会  频频  给  他们  派发  蚊香  。  
+基督教  关怀  无家者  协会  的  外展  社工  ，  过去  一直  有  探访李  郑屋  游乐  场外  的  露宿者  ，  该会  总干事  赖淑芬  说  ，  该处  的  露宿者  只有  数人  ，  且  流动  性  很大  。  
+不管  被  多少  蚊叮  也  没  什感觉  
+她  指  这些  露宿  者  日间  都  会  流连  于  冷气  场所  ，  晚上  才  到  游乐  场  露宿  ，  但  碍于  游乐  场  晚上  关门  ，  他  们  只  可  在  外围  「  打  地铺  」  。  
+由于  附近  多  草丛  ，  晚上  人流  少  ，  部分  露宿  者  又  因为  个人  卫生  问题  ，  总  成为  蚊叮  对象  。  
+但  露宿  者  早已  习惯  被  蚊叮  ，  不管  被  多少  蚊叮  也  没  什感觉  。  
+不过  ，  有些  露宿  者  一样  被  蚊叮  至  痕痒  入心  ，  要  不断  换位  找个  较少  蚊的  地方  睡觉  ，  故  彻夜  难眠  。  
+赖淑芬  指  区内  露宿者  之家  经常  「  爆满  」  ，  他  们  未必  有位  入住  ﹔  
+
+2019-04-03 14:27:07 INFO     Saving best checkpoint....
+2019-04-03 14:27:43 INFO     global_step = 1300
+2019-04-03 14:27:43 INFO     unsupervised_loss = 4.715391
+2019-04-03 14:28:19 INFO     global_step = 1400
+2019-04-03 14:28:19 INFO     unsupervised_loss = 4.634988
+2019-04-03 14:28:56 INFO     global_step = 1500
+2019-04-03 14:28:56 INFO     unsupervised_loss = 4.625855
+2019-04-03 14:29:32 INFO     global_step = 1600
+2019-04-03 14:29:32 INFO     unsupervised_loss = 4.618214
+2019-04-03 14:29:33 INFO     Saving checkpoint models/unsupervised-cityu-3...
+2019-04-03 14:29:38 INFO     Bash Command: bash run.sh valid cityu 3
+2019-04-03 14:29:41 INFO     Validation results:
+1.0.0
+=== SUMMARY:
+=== TOTAL INSERTIONS:	2719
+=== TOTAL DELETIONS:	2059
+=== TOTAL SUBSTITUTIONS:	6125
+=== TOTAL NCHANGE:	10903
+=== TOTAL TRUE WORD COUNT:	40936
+=== TOTAL TEST WORD COUNT:	41596
+=== TOTAL TRUE WORDS RECALL:	0.800
+=== TOTAL TEST WORDS PRECISION:	0.787
+=== F MEASURE:	0.794
+=== OOV Rate:	1.000
+=== OOV Recall Rate:	0.800
+=== IV Recall Rate:	--
+Examples:
+「  练  得铜  皮铁骨  」  露宿  早惯  蚊叮  
+本港  约有  450  至  600  名  露宿  者  ，  其中  近四  分之  一  ，  即  约  150  人  露宿  在  深水  埗  。  
+有  外展  社工  称  ，  露宿  者日  间  多到  商场  等  冷气  场所  避暑  ，  流连至  晚上  11  、  12  时  ，  才  用  纸皮  在  公园  外  「  打  地铺  」  ，  他  们  早已  「  练得  一身铜  皮铁骨  」  ，  彻夜  被  蚊叮  也习  以  为  常  ，  但  社工  在  炎夏  仍  会  频频  给  他们  派发  蚊香  。  
+基督教  关怀  无家  者  协会  的  外展  社工  ，  过去  一直  有  探访  李  郑屋  游乐  场外  的  露宿者  ，  该会  总干事  赖淑芬  说  ，  该处  的  露宿  者  只  有  数  人  ，  且  流动  性  很大  。  
+不管  被  多少  蚊叮  也  没什  感觉  
+她  指  这些  露宿  者  日间  都  会  流连  于  冷气  场所  ，  晚上  才  到  游乐  场  露宿  ，  但  碍于  游乐  场  晚上  关门  ，  他  们  只  可  在  外围  「  打  地铺  」  。  
+由于  附近  多  草丛  ，  晚上  人流  少  ，  部分  露宿  者  又  因为  个人  卫生  问题  ，  总  成为  蚊叮  对象  。  
+但  露宿  者  早已  习惯  被  蚊叮  ，  不管  被  多少  蚊叮  也  没什  感觉  。  
+不过  ，  有些  露宿  者  一样  被  蚊叮  至  痕痒  入心  ，  要  不断  换位  找个  较  少蚊  的  地方  睡觉  ，  故  彻夜  难眠  。  
+赖淑芬  指  区内  露宿  者  之家  经常  「  爆满  」  ，  他  们  未必  有位  入住  ﹔  
+
+2019-04-03 14:29:41 INFO     Saving best checkpoint....
+2019-04-03 14:30:15 INFO     global_step = 1700
+2019-04-03 14:30:15 INFO     unsupervised_loss = 4.539684
+2019-04-03 14:30:52 INFO     global_step = 1800
+2019-04-03 14:30:52 INFO     unsupervised_loss = 4.566292
+2019-04-03 14:31:28 INFO     global_step = 1900
+2019-04-03 14:31:28 INFO     unsupervised_loss = 4.569562
+2019-04-03 14:32:04 INFO     global_step = 2000
+2019-04-03 14:32:04 INFO     unsupervised_loss = 4.537582
+2019-04-03 14:32:05 INFO     Saving checkpoint models/unsupervised-cityu-3...
+2019-04-03 14:32:09 INFO     Bash Command: bash run.sh valid cityu 3
+2019-04-03 14:32:12 INFO     Validation results:
+1.0.0
+=== SUMMARY:
+=== TOTAL INSERTIONS:	2969
+=== TOTAL DELETIONS:	1777
+=== TOTAL SUBSTITUTIONS:	6008
+=== TOTAL NCHANGE:	10754
+=== TOTAL TRUE WORD COUNT:	40936
+=== TOTAL TEST WORD COUNT:	42128
+=== TOTAL TRUE WORDS RECALL:	0.810
+=== TOTAL TEST WORDS PRECISION:	0.787
+=== F MEASURE:	0.798
+=== OOV Rate:	1.000
+=== OOV Recall Rate:	0.810
+=== IV Recall Rate:	--
+Examples:
+「  练  得铜  皮铁骨  」  露宿  早惯  蚊叮  
+本港  约  有  450  至  600  名  露宿  者  ，  其中  近四  分之  一  ，  即  约  150  人  露宿  在  深水  埗  。  
+有  外展  社工  称  ，  露宿  者日  间  多到  商场  等  冷气  场所  避暑  ，  流连至  晚上  11  、  12  时  ，  才  用  纸皮  在  公园  外  「  打地  铺  」  ，  他  们  早已  「  练得  一  身铜  皮铁  骨  」  ，  彻夜  被  蚊叮  也习  以  为  常  ，  但  社工  在  炎夏  仍  会  频频  给  他  们  派发  蚊香  。  
+基督教  关怀  无家者  协会  的  外展  社工  ，  过去  一直  有  探访  李  郑屋  游乐  场外  的  露宿  者  ，  该会  总干事  赖淑芬  说  ，  该处  的  露宿  者  只  有  数  人  ，  且  流动  性  很  大  。  
+不管  被  多少  蚊叮  也  没  什  感觉  
+她  指  这些  露宿  者  日间  都  会  流连  于  冷气  场所  ，  晚上  才  到  游乐  场  露宿  ，  但  碍于  游乐  场  晚上  关门  ，  他  们  只  可  在  外围  「  打地  铺  」  。  
+由于  附近  多  草丛  ，  晚上  人流  少  ，  部分  露宿  者  又  因为  个人  卫生  问题  ，  总成为  蚊叮  对象  。  
+但  露宿  者  早已  习惯  被  蚊叮  ，  不管  被  多少  蚊叮  也  没  什  感觉  。  
+不过  ，  有些  露宿  者  一样  被  蚊叮  至  痕痒  入心  ，  要  不断  换位  找个  较少  蚊  的  地方  睡觉  ，  故  彻夜  难眠  。  
+赖淑芬  指  区内  露宿  者  之家  经常  「  爆满  」  ，  他  们  未必  有位  入住  ﹔  
+
+2019-04-03 14:32:12 INFO     Saving best checkpoint....
+2019-04-03 14:32:47 INFO     global_step = 2100
+2019-04-03 14:32:47 INFO     unsupervised_loss = 4.508034
+2019-04-03 14:33:22 INFO     global_step = 2200
+2019-04-03 14:33:22 INFO     unsupervised_loss = 4.488036
+2019-04-03 14:33:58 INFO     global_step = 2300
+2019-04-03 14:33:58 INFO     unsupervised_loss = 4.460999
+2019-04-03 14:34:35 INFO     global_step = 2400
+2019-04-03 14:34:35 INFO     unsupervised_loss = 4.484254
+2019-04-03 14:34:36 INFO     Saving checkpoint models/unsupervised-cityu-3...
+2019-04-03 14:34:40 INFO     Bash Command: bash run.sh valid cityu 3
+2019-04-03 14:34:43 INFO     Validation results:
+1.0.0
+=== SUMMARY:
+=== TOTAL INSERTIONS:	3229
+=== TOTAL DELETIONS:	1634
+=== TOTAL SUBSTITUTIONS:	5954
+=== TOTAL NCHANGE:	10817
+=== TOTAL TRUE WORD COUNT:	40936
+=== TOTAL TEST WORD COUNT:	42531
+=== TOTAL TRUE WORDS RECALL:	0.815
+=== TOTAL TEST WORDS PRECISION:	0.784
+=== F MEASURE:	0.799
+=== OOV Rate:	1.000
+=== OOV Recall Rate:	0.815
+=== IV Recall Rate:	--
+Examples:
+「  练  得铜  皮铁  骨  」  露宿  早惯  蚊叮  
+本港  约  有  450  至  600  名  露宿  者  ，  其中  近四  分  之一  ，  即  约  150  人  露宿  在  深水  埗  。  
+有  外展  社工  称  ，  露宿  者  日间  多  到  商场  等  冷气  场所  避暑  ，  流连至  晚上  11  、  12  时  ，  才  用纸  皮  在  公园  外  「  打地  铺  」  ，  他  们  早已  「  练  得  一  身  铜皮  铁骨  」  ，  彻夜  被  蚊叮  也习  以  为  常  ，  但  社工  在  炎夏  仍  会  频频  给  他  们  派发  蚊香  。  
+基督教  关怀  无家  者  协会  的  外展  社工  ，  过去  一直  有  探访  李  郑  屋  游乐  场外  的  露宿  者  ，  该会  总干事  赖  淑芬  说  ，  该处  的  露宿  者  只  有  数  人  ，  且  流动  性  很大  。  
+不管  被  多少  蚊叮  也  没什  感觉  
+她  指  这些  露宿  者  日间  都  会  流连  于  冷气  场所  ，  晚上  才  到  游乐  场  露宿  ，  但  碍于  游乐  场  晚上  关门  ，  他  们  只  可  在  外围  「  打地  铺  」  。  
+由于  附近  多  草丛  ，  晚上  人流  少  ，  部分  露宿  者  又  因为  个人  卫生  问题  ，  总成为  蚊叮  对象  。  
+但  露宿  者  早已  习惯  被  蚊叮  ，  不管  被  多少  蚊叮  也  没什  感觉  。  
+不过  ，  有些  露宿  者  一样  被  蚊叮  至  痕痒  入心  ，  要  不断  换位  找个  较  少蚊  的  地方  睡觉  ，  故  彻夜  难眠  。  
+赖  淑芬  指  区内  露宿  者  之家  经常  「  爆满  」  ，  他  们  未必  有位  入住  ﹔  
+
+2019-04-03 14:34:43 INFO     Saving best checkpoint....
+2019-04-03 14:35:17 INFO     global_step = 2500
+2019-04-03 14:35:17 INFO     unsupervised_loss = 4.433020
+2019-04-03 14:35:53 INFO     global_step = 2600
+2019-04-03 14:35:53 INFO     unsupervised_loss = 4.466296
+2019-04-03 14:36:30 INFO     global_step = 2700
+2019-04-03 14:36:30 INFO     unsupervised_loss = 4.489844
+2019-04-03 14:37:06 INFO     global_step = 2800
+2019-04-03 14:37:06 INFO     unsupervised_loss = 4.480763
+2019-04-03 14:37:07 INFO     Saving checkpoint models/unsupervised-cityu-3...
+2019-04-03 14:37:11 INFO     Bash Command: bash run.sh valid cityu 3
+2019-04-03 14:37:14 INFO     Validation results:
+1.0.0
+=== SUMMARY:
+=== TOTAL INSERTIONS:	3392
+=== TOTAL DELETIONS:	1520
+=== TOTAL SUBSTITUTIONS:	5846
+=== TOTAL NCHANGE:	10758
+=== TOTAL TRUE WORD COUNT:	40936
+=== TOTAL TEST WORD COUNT:	42808
+=== TOTAL TRUE WORDS RECALL:	0.820
+=== TOTAL TEST WORDS PRECISION:	0.784
+=== F MEASURE:	0.802
+=== OOV Rate:	1.000
+=== OOV Recall Rate:	0.820
+=== IV Recall Rate:	--
+Examples:
+「  练  得铜  皮铁  骨  」  露宿  早惯  蚊叮  
+本港  约  有  450  至  600  名  露宿者  ，  其中  近四  分之  一  ，  即  约  150  人  露宿  在  深水  埗  。  
+有  外展  社工  称  ，  露宿  者日  间  多到  商场  等  冷气  场所  避暑  ，  流连  至  晚上  11  、  12  时  ，  才  用  纸皮  在  公园  外  「  打  地铺  」  ，  他  们  早已  「  练得  一  身  铜皮  铁骨  」  ，  彻夜  被  蚊叮  也  习  以  为  常  ，  但  社工  在  炎夏  仍  会  频频  给  他  们  派发  蚊香  。  
+基督教  关怀  无家  者  协会  的  外展  社工  ，  过去  一直  有  探访  李  郑  屋  游乐  场外  的  露宿者  ，  该  会  总干事  赖  淑芬  说  ，  该处  的  露宿  者  只  有  数  人  ，  且  流动  性  很  大  。  
+不管  被  多少  蚊叮  也  没  什感觉  
+她  指  这些  露宿  者  日间  都  会  流连  于  冷气  场所  ，  晚上  才  到  游乐  场  露宿  ，  但  碍于  游乐  场  晚上  关门  ，  他  们  只  可  在  外围  「  打地  铺  」  。  
+由于  附近  多  草丛  ，  晚上  人流  少  ，  部分  露宿  者  又  因为  个人  卫生  问题  ，  总  成为  蚊叮  对象  。  
+但  露宿者  早已  习惯  被  蚊叮  ，  不管  被  多少  蚊叮  也  没  什感觉  。  
+不过  ，  有些  露宿  者  一样  被  蚊叮  至  痕痒  入心  ，  要  不断  换位  找个  较  少蚊  的  地方  睡觉  ，  故  彻夜  难眠  。  
+赖  淑芬  指  区内  露宿  者  之家  经常  「  爆满  」  ，  他  们  未必  有位  入住  ﹔  
+
+2019-04-03 14:37:14 INFO     Saving best checkpoint....
+2019-04-03 14:37:49 INFO     global_step = 2900
+2019-04-03 14:37:49 INFO     unsupervised_loss = 4.456549
+2019-04-03 14:38:26 INFO     global_step = 3000
+2019-04-03 14:38:26 INFO     unsupervised_loss = 4.470941
+2019-04-03 14:39:01 INFO     global_step = 3100
+2019-04-03 14:39:01 INFO     unsupervised_loss = 4.446281
+2019-04-03 14:39:37 INFO     global_step = 3200
+2019-04-03 14:39:37 INFO     unsupervised_loss = 4.443420
+2019-04-03 14:39:38 INFO     Saving checkpoint models/unsupervised-cityu-3...
+2019-04-03 14:39:42 INFO     Bash Command: bash run.sh valid cityu 3
+2019-04-03 14:39:45 INFO     Validation results:
+1.0.0
+=== SUMMARY:
+=== TOTAL INSERTIONS:	3454
+=== TOTAL DELETIONS:	1430
+=== TOTAL SUBSTITUTIONS:	5772
+=== TOTAL NCHANGE:	10656
+=== TOTAL TRUE WORD COUNT:	40936
+=== TOTAL TEST WORD COUNT:	42960
+=== TOTAL TRUE WORDS RECALL:	0.824
+=== TOTAL TEST WORDS PRECISION:	0.785
+=== F MEASURE:	0.804
+=== OOV Rate:	1.000
+=== OOV Recall Rate:	0.824
+=== IV Recall Rate:	--
+Examples:
+「  练  得铜  皮  铁骨  」  露宿  早惯  蚊叮  
+本港  约  有  450  至  600  名  露宿  者  ，  其中  近  四  分之  一  ，  即  约  150  人  露宿  在  深水  埗  。  
+有  外展  社工  称  ，  露宿  者  日间  多  到  商场  等  冷气  场所  避暑  ，  流连  至  晚上  11  、  12  时  ，  才  用  纸皮  在  公园  外  「  打地  铺  」  ，  他  们  早已  「  练得  一  身  铜皮  铁骨  」  ，  彻夜  被  蚊叮  也习  以  为  常  ，  但  社工  在  炎夏  仍  会  频频  给  他  们  派发  蚊香  。  
+基督教  关怀  无家  者  协会  的  外展  社工  ，  过去  一直  有  探访  李  郑  屋  游乐  场外  的  露宿  者  ，  该会  总干事  赖  淑芬  说  ，  该处  的  露宿  者  只  有数  人  ，  且  流动  性  很  大  。  
+不管  被  多少  蚊叮  也  没  什  感觉  
+她  指  这些  露宿  者  日间  都  会  流连  于  冷气  场所  ，  晚上  才  到  游乐  场  露宿  ，  但  碍于  游乐  场  晚上  关门  ，  他  们  只  可  在  外围  「  打地  铺  」  。  
+由于  附近  多  草丛  ，  晚上  人流  少  ，  部分  露宿  者  又  因为  个人  卫生  问题  ，  总成为  蚊叮  对象  。  
+但  露宿  者  早已  习惯  被  蚊叮  ，  不管  被  多少  蚊叮  也  没  什  感觉  。  
+不过  ，  有些  露宿  者  一样  被  蚊叮  至  痕痒  入心  ，  要  不断  换位  找个  较  少蚊  的  地方  睡觉  ，  故  彻夜  难眠  。  
+赖  淑芬  指  区内  露宿  者  之家  经常  「  爆满  」  ，  他  们  未必  有位  入住  ﹔  
+
+2019-04-03 14:39:45 INFO     Saving best checkpoint....
+2019-04-03 14:40:20 INFO     global_step = 3300
+2019-04-03 14:40:20 INFO     unsupervised_loss = 4.403853
+2019-04-03 14:40:56 INFO     global_step = 3400
+2019-04-03 14:40:56 INFO     unsupervised_loss = 4.436926
+2019-04-03 14:41:32 INFO     global_step = 3500
+2019-04-03 14:41:32 INFO     unsupervised_loss = 4.408816
+2019-04-03 14:42:08 INFO     global_step = 3600
+2019-04-03 14:42:08 INFO     unsupervised_loss = 4.358697
+2019-04-03 14:42:08 INFO     Saving checkpoint models/unsupervised-cityu-3...
+2019-04-03 14:42:13 INFO     Bash Command: bash run.sh valid cityu 3
+2019-04-03 14:42:15 INFO     Validation results:
+1.0.0
+=== SUMMARY:
+=== TOTAL INSERTIONS:	3663
+=== TOTAL DELETIONS:	1343
+=== TOTAL SUBSTITUTIONS:	5767
+=== TOTAL NCHANGE:	10773
+=== TOTAL TRUE WORD COUNT:	40936
+=== TOTAL TEST WORD COUNT:	43256
+=== TOTAL TRUE WORDS RECALL:	0.826
+=== TOTAL TEST WORDS PRECISION:	0.782
+=== F MEASURE:	0.804
+=== OOV Rate:	1.000
+=== OOV Recall Rate:	0.826
+=== IV Recall Rate:	--
+Examples:
+「  练  得铜  皮铁  骨  」  露宿  早  惯  蚊叮  
+本港  约  有  450  至  600  名  露宿  者  ，  其中  近四  分之  一  ，  即  约  150  人  露宿  在  深水  埗  。  
+有  外展  社工  称  ，  露宿  者  日间  多到  商场  等  冷气  场所  避暑  ，  流连  至  晚上  11  、  12  时  ，  才  用  纸  皮  在  公园  外  「  打  地  铺  」  ，  他  们  早已  「  练得  一  身铜  皮铁  骨  」  ，  彻夜  被  蚊叮  也  习  以  为  常  ，  但  社工  在  炎夏  仍  会  频频  给  他  们  派发  蚊香  。  
+基督教  关怀  无家者  协会  的  外展  社工  ，  过去  一直  有  探访  李  郑  屋  游乐  场外  的  露宿  者  ，  该会  总干事  赖  淑芬  说  ，  该处  的  露宿  者  只  有  数  人  ，  且  流动  性  很  大  。  
+不管  被  多少  蚊叮  也  没  什  感觉  
+她  指  这些  露宿  者  日间  都  会  流连  于  冷气  场所  ，  晚上  才  到  游乐  场  露宿  ，  但  碍  于  游乐  场  晚上  关门  ，  他  们  只  可  在  外围  「  打地  铺  」  。  
+由于  附近  多  草丛  ，  晚上  人流  少  ，  部分  露宿  者  又  因为  个人  卫生  问题  ，  总成为  蚊叮  对象  。  
+但  露宿  者  早已  习惯  被  蚊叮  ，  不管  被  多少  蚊叮  也  没  什  感觉  。  
+不过  ，  有些  露宿  者  一样  被  蚊叮  至  痕痒  入心  ，  要  不断  换位  找个  较  少蚊  的  地方  睡觉  ，  故  彻夜  难眠  。  
+赖  淑芬  指  区内  露宿  者  之家  经常  「  爆满  」  ，  他  们  未必  有位  入住  ﹔  
+
+2019-04-03 14:42:50 INFO     global_step = 3700
+2019-04-03 14:42:50 INFO     unsupervised_loss = 4.369507
+2019-04-03 14:43:27 INFO     global_step = 3800
+2019-04-03 14:43:27 INFO     unsupervised_loss = 4.387741
+2019-04-03 14:44:02 INFO     global_step = 3900
+2019-04-03 14:44:02 INFO     unsupervised_loss = 4.375634
+2019-04-03 14:44:39 INFO     global_step = 4000
+2019-04-03 14:44:39 INFO     unsupervised_loss = 4.401046
+2019-04-03 14:44:39 INFO     Saving checkpoint models/unsupervised-cityu-3...
+2019-04-03 14:44:44 INFO     Bash Command: bash run.sh valid cityu 3
+2019-04-03 14:44:46 INFO     Validation results:
+1.0.0
+=== SUMMARY:
+=== TOTAL INSERTIONS:	3539
+=== TOTAL DELETIONS:	1371
+=== TOTAL SUBSTITUTIONS:	5769
+=== TOTAL NCHANGE:	10679
+=== TOTAL TRUE WORD COUNT:	40936
+=== TOTAL TEST WORD COUNT:	43104
+=== TOTAL TRUE WORDS RECALL:	0.826
+=== TOTAL TEST WORDS PRECISION:	0.784
+=== F MEASURE:	0.804
+=== OOV Rate:	1.000
+=== OOV Recall Rate:	0.826
+=== IV Recall Rate:	--
+Examples:
+「  练  得铜  皮  铁骨  」  露宿  早惯  蚊叮  
+本港  约  有  450  至  600  名  露宿  者  ，  其中  近  四  分  之一  ，  即  约  150  人  露宿  在  深水  埗  。  
+有  外展  社工  称  ，  露宿  者  日间  多到  商场  等  冷气  场所  避暑  ，  流连  至  晚上  11  、  12  时  ，  才  用  纸皮  在  公园  外  「  打  地铺  」  ，  他  们  早已  「  练得  一  身铜  皮铁骨  」  ，  彻夜  被  蚊叮  也习  以  为  常  ，  但  社工  在  炎夏  仍  会  频频  给  他  们  派发  蚊香  。  
+基督教  关怀  无家者  协会  的  外展  社工  ，  过去  一直  有  探访  李  郑  屋  游乐  场外  的  露宿  者  ，  该会  总干事  赖  淑芬  说  ，  该处  的  露宿  者  只  有  数  人  ，  且  流动  性  很  大  。  
+不管  被  多少  蚊叮  也  没  什  感觉  
+她  指  这些  露宿  者  日间  都  会  流连  于  冷气  场所  ，  晚上  才  到  游乐  场  露宿  ，  但  碍  于  游乐  场  晚上  关门  ，  他  们  只  可  在  外围  「  打  地铺  」  。  
+由于  附近  多  草丛  ，  晚上  人流  少  ，  部分  露宿  者  又  因为  个人  卫生  问题  ，  总成为  蚊叮  对象  。  
+但  露宿  者  早已  习惯  被  蚊叮  ，  不管  被  多少  蚊叮  也  没  什  感觉  。  
+不过  ，  有些  露宿  者  一样  被  蚊叮  至  痕痒  入心  ，  要  不断  换位  找个  较  少蚊  的  地方  睡觉  ，  故  彻夜  难眠  。  
+赖  淑芬  指  区内  露宿  者  之家  经常  「  爆满  」  ，  他  们  未必  有位  入住  ﹔  
+
+2019-04-03 14:45:21 INFO     global_step = 4100
+2019-04-03 14:45:21 INFO     unsupervised_loss = 4.370900
+2019-04-03 14:45:57 INFO     global_step = 4200
+2019-04-03 14:45:57 INFO     unsupervised_loss = 4.357837
+2019-04-03 14:46:32 INFO     global_step = 4300
+2019-04-03 14:46:32 INFO     unsupervised_loss = 4.389465
+2019-04-03 14:47:09 INFO     global_step = 4400
+2019-04-03 14:47:09 INFO     unsupervised_loss = 4.374113
+2019-04-03 14:47:10 INFO     Saving checkpoint models/unsupervised-cityu-3...
+2019-04-03 14:47:14 INFO     Bash Command: bash run.sh valid cityu 3
+2019-04-03 14:47:16 INFO     Validation results:
+1.0.0
+=== SUMMARY:
+=== TOTAL INSERTIONS:	3720
+=== TOTAL DELETIONS:	1290
+=== TOTAL SUBSTITUTIONS:	5708
+=== TOTAL NCHANGE:	10718
+=== TOTAL TRUE WORD COUNT:	40936
+=== TOTAL TEST WORD COUNT:	43366
+=== TOTAL TRUE WORDS RECALL:	0.829
+=== TOTAL TEST WORDS PRECISION:	0.783
+=== F MEASURE:	0.805
+=== OOV Rate:	1.000
+=== OOV Recall Rate:	0.829
+=== IV Recall Rate:	--
+Examples:
+「  练  得铜  皮  铁骨  」  露宿  早  惯  蚊叮  
+本港  约  有  450  至  600  名  露宿  者  ，  其中  近  四  分  之一  ，  即  约  150  人  露宿  在  深水  埗  。  
+有  外展  社工  称  ，  露宿  者  日间  多到  商场  等  冷气  场所  避暑  ，  流连  至  晚上  11  、  12  时  ，  才  用  纸皮  在  公园  外  「  打  地铺  」  ，  他  们  早已  「  练得  一  身  铜皮  铁骨  」  ，  彻夜  被  蚊叮  也习  以  为  常  ，  但  社工  在  炎夏  仍  会  频频  给  他  们  派发  蚊香  。  
+基督教  关怀  无家  者  协会  的  外展  社工  ，  过去  一直  有  探访  李  郑  屋  游乐  场外  的  露宿  者  ，  该  会  总干事  赖  淑芬  说  ，  该处  的  露宿  者  只  有  数  人  ，  且  流动  性  很  大  。  
+不管  被  多少  蚊叮  也  没什  感觉  
+她  指  这些  露宿  者  日间  都  会  流连  于  冷气  场所  ，  晚上  才  到  游乐  场  露宿  ，  但  碍  于  游乐  场  晚上  关门  ，  他  们  只  可  在  外围  「  打  地铺  」  。  
+由于  附近  多  草丛  ，  晚上  人流  少  ，  部分  露宿  者  又  因为  个人  卫生  问题  ，  总  成为  蚊叮  对象  。  
+但  露宿  者  早已  习惯  被  蚊叮  ，  不管  被  多少  蚊叮  也  没什  感觉  。  
+不  过  ，  有些  露宿  者  一样  被  蚊叮  至  痕痒  入心  ，  要  不断  换位  找个  较  少蚊  的  地方  睡觉  ，  故  彻夜  难眠  。  
+赖  淑芬  指  区内  露宿  者  之家  经常  「  爆满  」  ，  他  们  未必  有位  入住  ﹔  
+
+2019-04-03 14:47:16 INFO     Saving best checkpoint....
+2019-04-03 14:47:51 INFO     global_step = 4500
+2019-04-03 14:47:51 INFO     unsupervised_loss = 4.365790
+2019-04-03 14:48:28 INFO     global_step = 4600
+2019-04-03 14:48:28 INFO     unsupervised_loss = 4.371850
+2019-04-03 14:49:04 INFO     global_step = 4700
+2019-04-03 14:49:04 INFO     unsupervised_loss = 4.365593
+2019-04-03 14:49:40 INFO     global_step = 4800
+2019-04-03 14:49:40 INFO     unsupervised_loss = 4.347247
+2019-04-03 14:49:40 INFO     Saving checkpoint models/unsupervised-cityu-3...
+2019-04-03 14:49:45 INFO     Bash Command: bash run.sh valid cityu 3
+2019-04-03 14:49:47 INFO     Validation results:
+1.0.0
+=== SUMMARY:
+=== TOTAL INSERTIONS:	3746
+=== TOTAL DELETIONS:	1309
+=== TOTAL SUBSTITUTIONS:	5830
+=== TOTAL NCHANGE:	10885
+=== TOTAL TRUE WORD COUNT:	40936
+=== TOTAL TEST WORD COUNT:	43373
+=== TOTAL TRUE WORDS RECALL:	0.826
+=== TOTAL TEST WORDS PRECISION:	0.779
+=== F MEASURE:	0.802
+=== OOV Rate:	1.000
+=== OOV Recall Rate:	0.826
+=== IV Recall Rate:	--
+Examples:
+「  练  得铜  皮  铁骨  」  露宿  早惯  蚊叮  
+本港  约  有  450  至  600  名  露宿  者  ，  其中  近四  分  之一  ，  即  约  150  人  露宿  在  深水  埗  。  
+有  外展  社工  称  ，  露宿  者  日间  多到  商场  等  冷气  场所  避暑  ，  流连  至  晚上  11  、  12  时  ，  才  用  纸皮  在  公园  外  「  打  地铺  」  ，  他  们  早已  「  练  得  一  身  铜皮  铁骨  」  ，  彻夜  被  蚊叮  也习  以  为  常  ，  但  社工  在  炎夏  仍  会  频频  给  他  们  派发  蚊香  。  
+基督教  关怀  无家  者  协会  的  外展  社工  ，  过去  一直  有  探访  李  郑  屋  游乐  场外  的  露宿  者  ，  该会  总干事  赖  淑芬  说  ，  该处  的  露宿  者  只  有数  人  ，  且  流动  性  很  大  。  
+不管  被  多  少  蚊叮  也  没  什  感觉  
+她  指  这些  露宿  者  日间  都  会  流连  于  冷气  场所  ，  晚上  才  到  游乐  场  露宿  ，  但  碍  于  游乐  场  晚上  关门  ，  他  们  只  可  在  外围  「  打  地铺  」  。  
+由于  附近  多  草丛  ，  晚上  人流  少  ，  部分  露宿  者  又  因为  个人  卫生  问题  ，  总成为  蚊叮  对象  。  
+但  露宿  者  早已  习惯  被  蚊叮  ，  不管  被  多  少  蚊叮  也  没  什  感觉  。  
+不  过  ，  有些  露宿  者  一样  被  蚊叮  至  痕痒  入心  ，  要  不断  换位  找个  较  少蚊  的  地方  睡觉  ，  故  彻夜  难眠  。  
+赖  淑芬  指  区内  露宿  者  之家  经常  「  爆满  」  ，  他  们  未必  有位  入住  ﹔  
+
+2019-04-03 14:50:22 INFO     global_step = 4900
+2019-04-03 14:50:22 INFO     unsupervised_loss = 4.352290
+2019-04-03 14:50:57 INFO     global_step = 5000
+2019-04-03 14:50:57 INFO     unsupervised_loss = 4.292978
+2019-04-03 14:51:32 INFO     global_step = 5100
+2019-04-03 14:51:32 INFO     unsupervised_loss = 4.272889
+2019-04-03 14:52:09 INFO     global_step = 5200
+2019-04-03 14:52:09 INFO     unsupervised_loss = 4.289378
+2019-04-03 14:52:09 INFO     Saving checkpoint models/unsupervised-cityu-3...
+2019-04-03 14:52:13 INFO     Bash Command: bash run.sh valid cityu 3
+2019-04-03 14:52:16 INFO     Validation results:
+1.0.0
+=== SUMMARY:
+=== TOTAL INSERTIONS:	3811
+=== TOTAL DELETIONS:	1226
+=== TOTAL SUBSTITUTIONS:	5777
+=== TOTAL NCHANGE:	10814
+=== TOTAL TRUE WORD COUNT:	40936
+=== TOTAL TEST WORD COUNT:	43521
+=== TOTAL TRUE WORDS RECALL:	0.829
+=== TOTAL TEST WORDS PRECISION:	0.780
+=== F MEASURE:	0.804
+=== OOV Rate:	1.000
+=== OOV Recall Rate:	0.829
+=== IV Recall Rate:	--
+Examples:
+「  练  得铜  皮  铁骨  」  露宿  早惯  蚊叮  
+本港  约  有  450  至  600  名  露宿  者  ，  其中  近  四  分  之一  ，  即  约  150  人  露宿  在  深水  埗  。  
+有  外展  社工  称  ，  露宿  者  日间  多到  商场  等  冷气  场所  避暑  ，  流连  至  晚上  11  、  12  时  ，  才  用  纸皮  在  公园  外  「  打  地铺  」  ，  他  们  早已  「  练  得  一  身  铜皮  铁骨  」  ，  彻夜  被  蚊叮  也习  以  为  常  ，  但  社工  在  炎夏  仍  会  频频  给  他  们  派发  蚊香  。  
+基督教  关怀  无家者  协会  的  外展  社工  ，  过去  一直  有  探访  李  郑  屋  游乐  场外  的  露宿  者  ，  该会  总干事  赖  淑芬  说  ，  该处  的  露宿  者  只  有  数  人  ，  且  流动  性  很  大  。  
+不管  被  多  少  蚊叮  也  没  什  感觉  
+她  指  这些  露宿  者  日间  都  会  流连  于  冷气  场所  ，  晚上  才  到  游乐  场  露宿  ，  但  碍  于  游乐  场  晚上  关门  ，  他  们  只  可  在  外围  「  打  地铺  」  。  
+由于  附近  多  草丛  ，  晚上  人流  少  ，  部分  露宿  者  又  因为  个人  卫生  问题  ，  总  成为  蚊叮  对象  。  
+但  露宿  者  早已  习惯  被  蚊叮  ，  不管  被  多  少  蚊叮  也  没  什  感觉  。  
+不  过  ，  有些  露宿  者  一样  被  蚊叮  至  痕痒  入心  ，  要  不断  换位  找个  较  少蚊  的  地方  睡觉  ，  故  彻夜  难眠  。  
+赖  淑芬  指  区内  露宿  者  之家  经常  「  爆满  」  ，  他  们  未必  有位  入住  ﹔  
+
+2019-04-03 14:52:52 INFO     global_step = 5300
+2019-04-03 14:52:52 INFO     unsupervised_loss = 4.322465
+2019-04-03 14:53:29 INFO     global_step = 5400
+2019-04-03 14:53:29 INFO     unsupervised_loss = 4.269060
+2019-04-03 14:54:06 INFO     global_step = 5500
+2019-04-03 14:54:06 INFO     unsupervised_loss = 4.289245
+2019-04-03 14:54:43 INFO     global_step = 5600
+2019-04-03 14:54:43 INFO     unsupervised_loss = 4.256851
+2019-04-03 14:54:44 INFO     Saving checkpoint models/unsupervised-cityu-3...
+2019-04-03 14:54:48 INFO     Bash Command: bash run.sh valid cityu 3
+2019-04-03 14:54:50 INFO     Validation results:
+1.0.0
+=== SUMMARY:
+=== TOTAL INSERTIONS:	3865
+=== TOTAL DELETIONS:	1214
+=== TOTAL SUBSTITUTIONS:	5733
+=== TOTAL NCHANGE:	10812
+=== TOTAL TRUE WORD COUNT:	40936
+=== TOTAL TEST WORD COUNT:	43587
+=== TOTAL TRUE WORDS RECALL:	0.830
+=== TOTAL TEST WORDS PRECISION:	0.780
+=== F MEASURE:	0.804
+=== OOV Rate:	1.000
+=== OOV Recall Rate:	0.830
+=== IV Recall Rate:	--
+Examples:
+「  练  得铜  皮  铁骨  」  露宿  早惯  蚊叮  
+本港  约  有  450  至  600  名  露宿  者  ，  其中  近  四  分  之一  ，  即  约  150  人  露宿  在  深水  埗  。  
+有  外展  社工  称  ，  露宿  者  日间  多到  商场  等  冷气  场所  避暑  ，  流连  至  晚上  11  、  12  时  ，  才  用  纸皮  在  公园  外  「  打  地铺  」  ，  他  们  早已  「  练  得  一  身  铜皮  铁骨  」  ，  彻夜  被  蚊叮  也习  以  为  常  ，  但  社工  在  炎夏  仍  会  频频  给  他  们  派发  蚊香  。  
+基督教  关怀  无家者  协会  的  外展  社工  ，  过去  一直  有  探访  李  郑  屋  游乐  场外  的  露宿  者  ，  该会  总干事  赖  淑芬  说  ，  该处  的  露宿  者  只  有数  人  ，  且  流动  性  很  大  。  
+不管  被  多  少  蚊叮  也  没  什  感觉  
+她  指  这些  露宿  者  日间  都  会  流连  于  冷气  场所  ，  晚上  才  到  游乐  场  露宿  ，  但  碍  于  游乐  场  晚上  关门  ，  他  们  只  可  在  外围  「  打  地铺  」  。  
+由于  附近  多  草丛  ，  晚上  人流  少  ，  部分  露宿  者  又  因为  个人  卫生  问题  ，  总  成为  蚊叮  对象  。  
+但  露宿  者  早已  习惯  被  蚊叮  ，  不管  被  多  少  蚊叮  也  没  什  感觉  。  
+不  过  ，  有些  露宿  者  一样  被  蚊叮  至  痕痒  入心  ，  要  不断  换位  找个  较  少蚊  的  地方  睡觉  ，  故  彻夜  难眠  。  
+赖  淑芬  指  区内  露宿  者  之家  经常  「  爆满  」  ，  他  们  未必  有位  入住  ﹔  
+
+2019-04-03 14:55:26 INFO     global_step = 5700
+2019-04-03 14:55:26 INFO     unsupervised_loss = 4.271963
+2019-04-03 14:56:02 INFO     global_step = 5800
+2019-04-03 14:56:02 INFO     unsupervised_loss = 4.263168
+2019-04-03 14:56:37 INFO     global_step = 5900
+2019-04-03 14:56:37 INFO     unsupervised_loss = 4.252419
+2019-04-03 14:57:14 INFO     Training Complete!
+2019-04-03 14:57:14 INFO     Saving final checkpoint models/unsupervised-cityu-3...
+2019-04-03 14:57:18 INFO     Bash Command: bash run.sh valid cityu 3
+2019-04-03 14:57:21 INFO     Validation results:
+1.0.0
+=== SUMMARY:
+=== TOTAL INSERTIONS:	3835
+=== TOTAL DELETIONS:	1224
+=== TOTAL SUBSTITUTIONS:	5774
+=== TOTAL NCHANGE:	10833
+=== TOTAL TRUE WORD COUNT:	40936
+=== TOTAL TEST WORD COUNT:	43547
+=== TOTAL TRUE WORDS RECALL:	0.829
+=== TOTAL TEST WORDS PRECISION:	0.779
+=== F MEASURE:	0.803
+=== OOV Rate:	1.000
+=== OOV Recall Rate:	0.829
+=== IV Recall Rate:	--
+Examples:
+「  练  得铜  皮  铁骨  」  露宿  早惯  蚊叮  
+本港  约  有  450  至  600  名  露宿  者  ，  其中  近  四  分  之一  ，  即  约  150  人  露宿  在  深水  埗  。  
+有  外展  社工  称  ，  露宿  者  日间  多到  商场  等  冷气  场所  避暑  ，  流连  至  晚上  11  、  12  时  ，  才  用  纸皮  在  公园  外  「  打  地铺  」  ，  他  们  早已  「  练  得  一  身  铜皮  铁骨  」  ，  彻夜  被  蚊叮  也习  以  为  常  ，  但  社工  在  炎夏  仍  会  频频  给  他  们  派发  蚊香  。  
+基督教  关怀  无家者  协会  的  外展  社工  ，  过去  一直  有  探访  李  郑  屋  游乐  场外  的  露宿  者  ，  该会  总干事  赖  淑芬  说  ，  该处  的  露宿  者  只  有  数  人  ，  且  流动  性  很  大  。  
+不管  被  多  少  蚊叮  也  没  什  感觉  
+她  指  这些  露宿  者  日间  都  会  流连  于  冷气  场所  ，  晚上  才  到  游乐  场  露宿  ，  但  碍  于  游乐  场  晚上  关门  ，  他  们  只  可  在  外围  「  打  地铺  」  。  
+由于  附近  多  草丛  ，  晚上  人流  少  ，  部分  露宿  者  又  因为  个人  卫生  问题  ，  总  成为  蚊叮  对象  。  
+但  露宿  者  早已  习惯  被  蚊叮  ，  不管  被  多  少  蚊叮  也  没  什  感觉  。  
+不  过  ，  有些  露宿  者  一样  被  蚊叮  至  痕痒  入心  ，  要  不断  换位  找个  较  少蚊  的  地方  睡觉  ，  故  彻夜  难眠  。  
+赖  淑芬  指  区内  露宿  者  之家  经常  「  爆满  」  ，  他  们  未必  有位  入住  ﹔  
+
+2019-04-03 14:57:21 INFO     Prepare prediction dataloader
+2019-04-03 14:57:21 INFO     #line: 1493
+2019-04-03 14:57:21 INFO     #sentence: 4827
+2019-04-03 14:57:21 INFO     #token: 75548
+2019-04-03 14:57:21 INFO     ##########Example 0##########
+2019-04-03 14:57:21 INFO     Characters: <BOS> 「 练 得 铜 皮 铁 骨 」 露 宿 早 惯 蚊 叮 <\n>
+2019-04-03 14:57:21 INFO     Tokens: <BOS> <PUNC> 练 得 铜 皮 铁 骨 <PUNC> 露 宿 早 惯 蚊 叮 </s>
+2019-04-03 14:57:21 INFO     Segments: 14
+2019-04-03 14:57:21 INFO     ##########Example 1##########
+2019-04-03 14:57:21 INFO     Characters: <BOS> 本 港 约 有 450 至 600 名 露 宿 者 ， 
+2019-04-03 14:57:21 INFO     Tokens: <BOS> 本 港 约 有 <NUM> 至 <NUM> 名 露 宿 者 <PUNC> </s>
+2019-04-03 14:57:21 INFO     Segments: 12
+2019-04-03 14:57:21 INFO     ##########Example 2##########
+2019-04-03 14:57:21 INFO     Characters: <BOS> 其 中 近 四 分 之 一 ， 
+2019-04-03 14:57:21 INFO     Tokens: <BOS> 其 中 近 四 分 之 一 <PUNC> </s>
+2019-04-03 14:57:21 INFO     Segments: 8
+2019-04-03 14:57:21 INFO     ##########Example 3##########
+2019-04-03 14:57:21 INFO     Characters: <BOS> 即 约 150 人 露 宿 在 深 水 埗 。 <\n>
+2019-04-03 14:57:21 INFO     Tokens: <BOS> 即 约 <NUM> 人 露 宿 在 深 水 埗 <PUNC> </s>
+2019-04-03 14:57:21 INFO     Segments: 11
+2019-04-03 14:57:21 INFO     ##########Example 4##########
+2019-04-03 14:57:21 INFO     Characters: <BOS> 有 外 展 社 工 称 ， 
+2019-04-03 14:57:21 INFO     Tokens: <BOS> 有 外 展 社 工 称 <PUNC> </s>
+2019-04-03 14:57:21 INFO     Segments: 7
+2019-04-03 14:57:21 INFO     ##########Example 5##########
+2019-04-03 14:57:21 INFO     Characters: <BOS> 露 宿 者 日 间 多 到 商 场 等 冷 气 场 所 避 暑 ， 
+2019-04-03 14:57:21 INFO     Tokens: <BOS> 露 宿 者 日 间 多 到 商 场 等 冷 气 场 所 避 暑 <PUNC> </s>
+2019-04-03 14:57:21 INFO     Segments: 17
+2019-04-03 14:57:21 INFO     ##########Example 6##########
+2019-04-03 14:57:21 INFO     Characters: <BOS> 流 连 至 晚 上 11 、 12 时 ， 
+2019-04-03 14:57:21 INFO     Tokens: <BOS> 流 连 至 晚 上 <NUM> <PUNC> <NUM> 时 <PUNC> </s>
+2019-04-03 14:57:21 INFO     Segments: 10
+2019-04-03 14:57:21 INFO     ##########Example 7##########
+2019-04-03 14:57:21 INFO     Characters: <BOS> 才 用 纸 皮 在 公 园 外 「 打 地 铺 」  ， 
+2019-04-03 14:57:21 INFO     Tokens: <BOS> 才 用 纸 皮 在 公 园 外 <PUNC> 打 地 铺 <PUNC> </s>
+2019-04-03 14:57:21 INFO     Segments: 13
+2019-04-03 14:57:21 INFO     ##########Example 8##########
+2019-04-03 14:57:21 INFO     Characters: <BOS> 他 们 早 已 「 练 得 一 身 铜 皮 铁 骨 」  ， 
+2019-04-03 14:57:21 INFO     Tokens: <BOS> 他 们 早 已 <PUNC> 练 得 一 身 铜 皮 铁 骨 <PUNC> </s>
+2019-04-03 14:57:21 INFO     Segments: 14
+2019-04-03 14:57:21 INFO     ##########Example 9##########
+2019-04-03 14:57:21 INFO     Characters: <BOS> 彻 夜 被 蚊 叮 也 习 以 为 常 ， 
+2019-04-03 14:57:21 INFO     Tokens: <BOS> 彻 夜 被 蚊 叮 也 习 以 为 常 <PUNC> </s>
+2019-04-03 14:57:21 INFO     Segments: 11
+2019-04-03 14:57:21 INFO     Loading checkpoint None...
+2019-04-03 14:57:21 INFO     Model Info:
+SegmentalLM(
+  (embedding): Embedding(8677, 256)
+  (embedding2vocab): Linear(in_features=256, out_features=8677, bias=True)
+  (context_encoder): ContextEncoder(
+    (rnn): LSTM(256, 256, num_layers=2, dropout=0.1)
+  )
+  (segment_decoder): SegmentDecoder(
+    (rnn): LSTM(256, 256, num_layers=2, dropout=0.1)
+    (output_dropout): Dropout(p=0.1)
+  )
+  (decoder_h_transformation): Linear(in_features=256, out_features=512, bias=True)
+  (encoder_input_dropout): Dropout(p=0.1)
+  (decoder_input_dropout): Dropout(p=0.3)
+  (y0_transformation): Linear(in_features=256, out_features=256, bias=True)
+)
+2019-04-03 14:57:21 INFO     Global step: 4400
+2019-04-03 14:57:25 INFO     Bash Command: bash run.sh valid cityu 3
+2019-04-03 14:57:28 INFO     Test evaluation results:
+1.0.0
+=== SUMMARY:
+=== TOTAL INSERTIONS:	3835
+=== TOTAL DELETIONS:	1224
+=== TOTAL SUBSTITUTIONS:	5774
+=== TOTAL NCHANGE:	10833
+=== TOTAL TRUE WORD COUNT:	40936
+=== TOTAL TEST WORD COUNT:	43547
+=== TOTAL TRUE WORDS RECALL:	0.829
+=== TOTAL TEST WORDS PRECISION:	0.779
+=== F MEASURE:	0.803
+=== OOV Rate:	1.000
+=== OOV Recall Rate:	0.829
+=== IV Recall Rate:	--
+Examples:
+「  练  得铜  皮  铁骨  」  露宿  早惯  蚊叮  
+本港  约  有  450  至  600  名  露宿  者  ，  其中  近  四  分  之一  ，  即  约  150  人  露宿  在  深水  埗  。  
+有  外展  社工  称  ，  露宿  者  日间  多到  商场  等  冷气  场所  避暑  ，  流连  至  晚上  11  、  12  时  ，  才  用  纸皮  在  公园  外  「  打  地铺  」  ，  他  们  早已  「  练  得  一  身  铜皮  铁骨  」  ，  彻夜  被  蚊叮  也习  以  为  常  ，  但  社工  在  炎夏  仍  会  频频  给  他  们  派发  蚊香  。  
+基督教  关怀  无家者  协会  的  外展  社工  ，  过去  一直  有  探访  李  郑  屋  游乐  场外  的  露宿  者  ，  该会  总干事  赖  淑芬  说  ，  该处  的  露宿  者  只  有  数  人  ，  且  流动  性  很  大  。  
+不管  被  多  少  蚊叮  也  没  什  感觉  
+她  指  这些  露宿  者  日间  都  会  流连  于  冷气  场所  ，  晚上  才  到  游乐  场  露宿  ，  但  碍  于  游乐  场  晚上  关门  ，  他  们  只  可  在  外围  「  打  地铺  」  。  
+由于  附近  多  草丛  ，  晚上  人流  少  ，  部分  露宿  者  又  因为  个人  卫生  问题  ，  总  成为  蚊叮  对象  。  
+但  露宿  者  早已  习惯  被  蚊叮  ，  不管  被  多  少  蚊叮  也  没  什  感觉  。  
+不  过  ，  有些  露宿  者  一样  被  蚊叮  至  痕痒  入心  ，  要  不断  换位  找个  较  少蚊  的  地方  睡觉  ，  故  彻夜  难眠  。  
+赖  淑芬  指  区内  露宿  者  之家  经常  「  爆满  」  ，  他  们  未必  有位  入住  ﹔  
+

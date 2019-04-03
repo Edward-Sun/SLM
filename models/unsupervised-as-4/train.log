@@ -1,0 +1,811 @@
+2019-04-03 13:28:49 INFO     Namespace(adam_learning_rate=0.005, bos_token='<BOS>', config_file='models/slm_as_4_config.json', cpu_num=4, do_predict=True, do_supervised=False, do_unsupervised=True, do_valid=True, english_token='<ENG>', eos_token='</s>', gradient_clip=0.1, init_checkpoint=None, init_embedding_path='data/vocab/embedding.npy', log_every_steps=100, max_seq_length=32, number_token='<NUM>', predict_batch_size=500, predict_inputs=['data/as/test.txt'], predict_output='models/unsupervised-as-4/prediction.txt', punctuation_token='<PUNC>', save_every_steps=400, save_path='models/unsupervised-as-4', segment_token='  ', segmented=None, sgd_learning_rate=16.0, supervised_batch_size=1000, supervised_lambda=1.0, train_steps=6000, unsegmented=['data/as/unsegmented.txt', 'data/as/test.txt'], unsupervised_batch_size=16000, use_cuda=True, valid_batch_size=500, valid_inputs=['data/as/test.txt'], valid_output='models/unsupervised-as-4/valid_prediction.txt', vocab_file='data/vocab/vocab.txt', warm_up_steps=800)
+2019-04-03 13:28:49 INFO     Loading init embedding from data/vocab/embedding.npy...
+2019-04-03 13:28:49 INFO     Config Info:
+{
+  "decoder_dropout_rate": 0.1,
+  "decoder_input_dropout_rate": 0.2,
+  "decoder_layer_number": 2,
+  "embedding_size": 256,
+  "encoder_dropout_rate": 0.1,
+  "encoder_input_dropout_rate": 0.1,
+  "encoder_layer_number": 2,
+  "eng_id": 7,
+  "eos_id": 5,
+  "hidden_size": 256,
+  "max_segment_length": 4,
+  "num_id": 3,
+  "punc_id": 2,
+  "vocab_size": 8677
+}
+2019-04-03 13:28:49 INFO     Model Info:
+SegmentalLM(
+  (embedding): Embedding(8677, 256)
+  (embedding2vocab): Linear(in_features=256, out_features=8677, bias=True)
+  (context_encoder): ContextEncoder(
+    (rnn): LSTM(256, 256, num_layers=2, dropout=0.1)
+  )
+  (segment_decoder): SegmentDecoder(
+    (rnn): LSTM(256, 256, num_layers=2, dropout=0.1)
+    (output_dropout): Dropout(p=0.1)
+  )
+  (decoder_h_transformation): Linear(in_features=256, out_features=512, bias=True)
+  (encoder_input_dropout): Dropout(p=0.1)
+  (decoder_input_dropout): Dropout(p=0.2)
+  (y0_transformation): Linear(in_features=256, out_features=256, bias=True)
+)
+2019-04-03 13:28:53 INFO     Prepare unsupervised dataloader
+2019-04-03 13:29:21 INFO     #line: 723385
+2019-04-03 13:29:21 INFO     #sentence: 736485
+2019-04-03 13:29:21 INFO     #token: 9899631
+2019-04-03 13:29:23 INFO     ##########Example 0##########
+2019-04-03 13:29:23 INFO     Characters: <BOS> 时 间 ： <\n>
+2019-04-03 13:29:23 INFO     Tokens: <BOS> 时 间 <PUNC> </s>
+2019-04-03 13:29:23 INFO     Segments: 3
+2019-04-03 13:29:23 INFO     ##########Example 1##########
+2019-04-03 13:29:23 INFO     Characters: <BOS> 三 月 十 日 （ 星 期 四 ） 上 午 十 时 。 <\n>
+2019-04-03 13:29:23 INFO     Tokens: <BOS> 三 月 十 日 <PUNC> 星 期 四 <PUNC> 上 午 十 时 <PUNC> </s>
+2019-04-03 13:29:23 INFO     Segments: 14
+2019-04-03 13:29:23 INFO     ##########Example 2##########
+2019-04-03 13:29:23 INFO     Characters: <BOS> 地 点 ： <\n>
+2019-04-03 13:29:23 INFO     Tokens: <BOS> 地 点 <PUNC> </s>
+2019-04-03 13:29:23 INFO     Segments: 3
+2019-04-03 13:29:23 INFO     ##########Example 3##########
+2019-04-03 13:29:23 INFO     Characters: <BOS> 学 术 活 动 中 心 一 楼 简 报 室 。 <\n>
+2019-04-03 13:29:23 INFO     Tokens: <BOS> 学 术 活 动 中 心 一 楼 简 报 室 <PUNC> </s>
+2019-04-03 13:29:23 INFO     Segments: 12
+2019-04-03 13:29:23 INFO     ##########Example 4##########
+2019-04-03 13:29:23 INFO     Characters: <BOS> 主 讲 ： <\n>
+2019-04-03 13:29:23 INFO     Tokens: <BOS> 主 讲 <PUNC> </s>
+2019-04-03 13:29:23 INFO     Segments: 3
+2019-04-03 13:29:23 INFO     ##########Example 5##########
+2019-04-03 13:29:23 INFO     Characters: <BOS> 民 族 所 所 长 庄 英 章 先 生 。 <\n>
+2019-04-03 13:29:23 INFO     Tokens: <BOS> 民 族 所 所 长 庄 英 章 先 生 <PUNC> </s>
+2019-04-03 13:29:23 INFO     Segments: 11
+2019-04-03 13:29:23 INFO     ##########Example 6##########
+2019-04-03 13:29:23 INFO     Characters: <BOS> 讲 题 ： <\n>
+2019-04-03 13:29:23 INFO     Tokens: <BOS> 讲 题 <PUNC> </s>
+2019-04-03 13:29:23 INFO     Segments: 3
+2019-04-03 13:29:23 INFO     ##########Example 7##########
+2019-04-03 13:29:23 INFO     Characters: <BOS> 闽 、 台 汉 人 社 会 研 究 的 若 干 考 察 。 <\n>
+2019-04-03 13:29:23 INFO     Tokens: <BOS> 闽 <PUNC> 台 汉 人 社 会 研 究 的 若 干 考 察 <PUNC> </s>
+2019-04-03 13:29:23 INFO     Segments: 15
+2019-04-03 13:29:23 INFO     ##########Example 8##########
+2019-04-03 13:29:23 INFO     Characters: <BOS> 李 院 长 于 二 月 二 十 六 日 至 三 月 十 五 日 赴 美 访 问 ， <\n>
+2019-04-03 13:29:23 INFO     Tokens: <BOS> 李 院 长 于 二 月 二 十 六 日 至 三 月 十 五 日 赴 美 访 问 <PUNC> </s>
+2019-04-03 13:29:23 INFO     Segments: 21
+2019-04-03 13:29:23 INFO     ##########Example 9##########
+2019-04-03 13:29:23 INFO     Characters: <BOS> 期 间 将 与 在 美 院 士 商 讨 院 务 ， <\n>
+2019-04-03 13:29:23 INFO     Tokens: <BOS> 期 间 将 与 在 美 院 士 商 讨 院 务 <PUNC> </s>
+2019-04-03 13:29:23 INFO     Segments: 13
+2019-04-03 13:29:29 INFO     Bucket batch sizes: 2285,1777,1454,1333,1142,941,761,500
+2019-04-03 13:29:29 INFO     Prepare validation dataloader
+2019-04-03 13:29:30 INFO     #line: 14432
+2019-04-03 13:29:30 INFO     #sentence: 14998
+2019-04-03 13:29:30 INFO     #token: 222800
+2019-04-03 13:29:30 INFO     ##########Example 0##########
+2019-04-03 13:29:30 INFO     Characters: <BOS> 许 多 社 区 长 青 学 苑 多 开 设 有 书 法 、 插 花 、 土 风 舞 班 ， <\n>
+2019-04-03 13:29:30 INFO     Tokens: <BOS> 许 多 社 区 长 青 学 苑 多 开 设 有 书 法 <PUNC> 插 花 <PUNC> 土 风 舞 班 <PUNC> </s>
+2019-04-03 13:29:30 INFO     Segments: 23
+2019-04-03 13:29:30 INFO     ##########Example 1##########
+2019-04-03 13:29:30 INFO     Characters: <BOS> 文 山 区 长 青 学 苑 则 有 个 十 分 特 别 的 「 英 文 歌 唱 班 」  ， <\n>
+2019-04-03 13:29:30 INFO     Tokens: <BOS> 文 山 区 长 青 学 苑 则 有 个 十 分 特 别 的 <PUNC> 英 文 歌 唱 班 <PUNC> </s>
+2019-04-03 13:29:30 INFO     Segments: 22
+2019-04-03 13:29:30 INFO     ##########Example 2##########
+2019-04-03 13:29:30 INFO     Characters: <BOS> 成 员 年 龄 均 超 过 六 十 岁 ， <\n>
+2019-04-03 13:29:30 INFO     Tokens: <BOS> 成 员 年 龄 均 超 过 六 十 岁 <PUNC> </s>
+2019-04-03 13:29:30 INFO     Segments: 11
+2019-04-03 13:29:30 INFO     ##########Example 3##########
+2019-04-03 13:29:30 INFO     Characters: <BOS> 这 群 白 发 苍 苍 ， <\n>
+2019-04-03 13:29:30 INFO     Tokens: <BOS> 这 群 白 发 苍 苍 <PUNC> </s>
+2019-04-03 13:29:30 INFO     Segments: 7
+2019-04-03 13:29:30 INFO     ##########Example 4##########
+2019-04-03 13:29:30 INFO     Characters: <BOS> 爷 爷 、 奶 奶 级 的 学 员 唱 起 英 文 歌 来 字 正 腔 圆 ， <\n>
+2019-04-03 13:29:30 INFO     Tokens: <BOS> 爷 爷 <PUNC> 奶 奶 级 的 学 员 唱 起 英 文 歌 来 字 正 腔 圆 <PUNC> </s>
+2019-04-03 13:29:30 INFO     Segments: 20
+2019-04-03 13:29:30 INFO     ##########Example 5##########
+2019-04-03 13:29:30 INFO     Characters: <BOS> 有 模 有 样 。 <\n>
+2019-04-03 13:29:30 INFO     Tokens: <BOS> 有 模 有 样 <PUNC> </s>
+2019-04-03 13:29:30 INFO     Segments: 5
+2019-04-03 13:29:30 INFO     ##########Example 6##########
+2019-04-03 13:29:30 INFO     Characters: <BOS> 对 他 们 来 说 ， <\n>
+2019-04-03 13:29:30 INFO     Tokens: <BOS> 对 他 们 来 说 <PUNC> </s>
+2019-04-03 13:29:30 INFO     Segments: 6
+2019-04-03 13:29:30 INFO     ##########Example 7##########
+2019-04-03 13:29:30 INFO     Characters: <BOS> 能 与 一 群 志 同 道 合 的 朋 友 共 同 回 味 年 少 时 期 流 行 的 歌 曲 ， <\n>
+2019-04-03 13:29:30 INFO     Tokens: <BOS> 能 与 一 群 志 同 道 合 的 朋 友 共 同 回 味 年 少 时 期 流 行 的 歌 曲 <PUNC> </s>
+2019-04-03 13:29:30 INFO     Segments: 25
+2019-04-03 13:29:30 INFO     ##########Example 8##########
+2019-04-03 13:29:30 INFO     Characters: <BOS> 才 是 参 加 英 文 歌 唱 班 最 大 乐 趣 。 <\n>
+2019-04-03 13:29:30 INFO     Tokens: <BOS> 才 是 参 加 英 文 歌 唱 班 最 大 乐 趣 <PUNC> </s>
+2019-04-03 13:29:30 INFO     Segments: 14
+2019-04-03 13:29:30 INFO     ##########Example 9##########
+2019-04-03 13:29:30 INFO     Characters: <BOS> 长 青 学 苑 英 文 歌 唱 班 昨 日 在 社 教 馆 举 行 「 英 文 怀 念 金 曲 演 唱 会 」  ， <\n>
+2019-04-03 13:29:30 INFO     Tokens: <BOS> 长 青 学 苑 英 文 歌 唱 班 昨 日 在 社 教 馆 举 行 <PUNC> 英 文 怀 念 金 曲 演 唱 会 <PUNC> </s>
+2019-04-03 13:29:30 INFO     Segments: 28
+2019-04-03 13:29:30 INFO     Ramdomly Initializing SLM parameters...
+2019-04-03 13:29:31 INFO     global_step = 0
+2019-04-03 13:29:31 INFO     unsupervised_loss = 17.037518
+2019-04-03 13:29:31 INFO     Saving checkpoint models/unsupervised-as-4...
+2019-04-03 13:29:46 INFO     Bash Command: bash run.sh valid as 4
+2019-04-03 13:30:05 INFO     Validation results:
+1.0.0
+=== SUMMARY:
+=== TOTAL INSERTIONS:	67651
+=== TOTAL DELETIONS:	289
+=== TOTAL SUBSTITUTIONS:	60290
+=== TOTAL NCHANGE:	128230
+=== TOTAL TRUE WORD COUNT:	122610
+=== TOTAL TEST WORD COUNT:	189972
+=== TOTAL TRUE WORDS RECALL:	0.506
+=== TOTAL TEST WORDS PRECISION:	0.327
+=== F MEASURE:	0.397
+=== OOV Rate:	1.000
+=== OOV Recall Rate:	0.506
+=== IV Recall Rate:	--
+Examples:
+许  多  社  区  长  青  学  苑  多  开  设  有  书  法  、  插  花  、  土  风  舞  班  ，  
+文  山  区  长  青  学  苑  则  有  个  十  分  特  别  的  「  英  文  歌  唱  班  」  ，  
+成  员  年  龄  均  超  过  六  十  岁  ，  
+这  群  白  发  苍  苍  ，  
+爷  爷  、  奶  奶  级  的  学  员  唱  起  英  文  歌  来  字  正  腔  圆  ，  
+有  模  有  样  。  
+对  他  们  来  说  ，  
+能  与  一  群  志  同  道  合  的  朋  友  共  同  回  味  年  少  时  期  流  行  的  歌  曲  ，  
+才  是  参  加  英  文  歌  唱  班  最  大  乐  趣  。  
+长  青  学  苑  英  文  歌  唱  班  昨  日  在  社  教  馆  举  行  「  英  文  怀  念  金  曲  演  唱  会  」  ，  
+
+2019-04-03 13:30:05 INFO     Saving best checkpoint....
+2019-04-03 13:30:46 INFO     global_step = 100
+2019-04-03 13:30:46 INFO     unsupervised_loss = 8.391631
+2019-04-03 13:31:24 INFO     global_step = 200
+2019-04-03 13:31:24 INFO     unsupervised_loss = 6.274644
+2019-04-03 13:32:04 INFO     global_step = 300
+2019-04-03 13:32:04 INFO     unsupervised_loss = 5.709041
+2019-04-03 13:32:43 INFO     global_step = 400
+2019-04-03 13:32:43 INFO     unsupervised_loss = 5.483441
+2019-04-03 13:32:44 INFO     Saving checkpoint models/unsupervised-as-4...
+2019-04-03 13:32:58 INFO     Bash Command: bash run.sh valid as 4
+2019-04-03 13:33:16 INFO     Validation results:
+1.0.0
+=== SUMMARY:
+=== TOTAL INSERTIONS:	5614
+=== TOTAL DELETIONS:	12208
+=== TOTAL SUBSTITUTIONS:	25517
+=== TOTAL NCHANGE:	43339
+=== TOTAL TRUE WORD COUNT:	122610
+=== TOTAL TEST WORD COUNT:	116016
+=== TOTAL TRUE WORDS RECALL:	0.692
+=== TOTAL TEST WORDS PRECISION:	0.732
+=== F MEASURE:	0.711
+=== OOV Rate:	1.000
+=== OOV Recall Rate:	0.692
+=== IV Recall Rate:	--
+Examples:
+许多  社区长  青  学苑  多  开设  有  书法  、  插花  、  土  风舞  班  ，  
+文山  区长  青  学苑  则  有个  十分  特别的  「  英文  歌唱  班  」  ，  
+成员  年龄  均  超过  六十岁  ，  
+这  群白  发苍苍  ，  
+爷爷  、  奶奶  级的  学员  唱起  英文歌  来  字  正  腔圆  ，  
+有  模有样  。  
+对  他  们  来说  ，  
+能与  一群  志同道  合的  朋友  共同  回味  年少  时期  流行  的歌曲  ，  
+才是  参加  英文  歌唱  班  最大  乐趣  。  
+长青  学苑  英文  歌唱  班  昨日  在  社  教馆  举行  「  英文  怀念  金曲  演唱  会  」  ，  
+
+2019-04-03 13:33:16 INFO     Saving best checkpoint....
+2019-04-03 13:34:02 INFO     global_step = 500
+2019-04-03 13:34:02 INFO     unsupervised_loss = 5.378118
+2019-04-03 13:34:43 INFO     global_step = 600
+2019-04-03 13:34:43 INFO     unsupervised_loss = 5.283141
+2019-04-03 13:35:25 INFO     global_step = 700
+2019-04-03 13:35:25 INFO     unsupervised_loss = 5.203592
+2019-04-03 13:36:04 INFO     global_step = 800
+2019-04-03 13:36:04 INFO     unsupervised_loss = 5.151636
+2019-04-03 13:36:04 INFO     Saving checkpoint models/unsupervised-as-4...
+2019-04-03 13:36:19 INFO     Bash Command: bash run.sh valid as 4
+2019-04-03 13:36:36 INFO     Validation results:
+1.0.0
+=== SUMMARY:
+=== TOTAL INSERTIONS:	2921
+=== TOTAL DELETIONS:	16954
+=== TOTAL SUBSTITUTIONS:	25039
+=== TOTAL NCHANGE:	44914
+=== TOTAL TRUE WORD COUNT:	122610
+=== TOTAL TEST WORD COUNT:	108577
+=== TOTAL TRUE WORDS RECALL:	0.658
+=== TOTAL TEST WORDS PRECISION:	0.742
+=== F MEASURE:	0.697
+=== OOV Rate:	1.000
+=== OOV Recall Rate:	0.658
+=== IV Recall Rate:	--
+Examples:
+许多  社区长  青  学苑  多  开设有  书法  、  插花  、  土风  舞班  ，  
+文山  区长  青  学苑  则  有个  十分  特别的  「  英文  歌唱  班  」  ，  
+成员  年龄  均  超过  六十岁  ，  
+这群白  发苍苍  ，  
+爷爷  、  奶奶  级的  学员  唱起  英文歌  来  字  正腔圆  ，  
+有  模有样  。  
+对  他  们  来说  ，  
+能与  一群  志同道  合的  朋友  共同  回味  年少  时期  流行的  歌曲  ，  
+才是  参加  英文  歌唱  班  最大  乐趣  。  
+长青  学苑  英文  歌唱  班昨日  在社  教馆  举行  「  英文  怀念  金曲  演唱会  」  ，  
+
+2019-04-03 13:37:14 INFO     global_step = 900
+2019-04-03 13:37:14 INFO     unsupervised_loss = 5.085592
+2019-04-03 13:37:58 INFO     global_step = 1000
+2019-04-03 13:37:58 INFO     unsupervised_loss = 4.996849
+2019-04-03 13:38:37 INFO     global_step = 1100
+2019-04-03 13:38:37 INFO     unsupervised_loss = 4.854220
+2019-04-03 13:39:17 INFO     global_step = 1200
+2019-04-03 13:39:17 INFO     unsupervised_loss = 4.796429
+2019-04-03 13:39:17 INFO     Saving checkpoint models/unsupervised-as-4...
+2019-04-03 13:39:32 INFO     Bash Command: bash run.sh valid as 4
+2019-04-03 13:39:51 INFO     Validation results:
+1.0.0
+=== SUMMARY:
+=== TOTAL INSERTIONS:	5006
+=== TOTAL DELETIONS:	10421
+=== TOTAL SUBSTITUTIONS:	20387
+=== TOTAL NCHANGE:	35814
+=== TOTAL TRUE WORD COUNT:	122610
+=== TOTAL TEST WORD COUNT:	117195
+=== TOTAL TRUE WORDS RECALL:	0.749
+=== TOTAL TEST WORDS PRECISION:	0.783
+=== F MEASURE:	0.766
+=== OOV Rate:	1.000
+=== OOV Recall Rate:	0.749
+=== IV Recall Rate:	--
+Examples:
+许多  社区长  青  学苑  多  开设  有  书法  、  插花  、  土风舞  班  ，  
+文山区  长青  学苑  则  有个  十分  特别  的  「  英文  歌唱  班  」  ，  
+成员  年龄  均  超过  六十  岁  ，  
+这群白  发苍苍  ，  
+爷爷  、  奶奶  级  的  学员  唱起  英文歌  来  字  正腔圆  ，  
+有  模有样  。  
+对  他  们  来说  ，  
+能与  一群  志同道  合的  朋友  共同  回味  年少  时期  流行  的歌曲  ，  
+才  是  参加  英文  歌唱  班  最大  乐趣  。  
+长青  学苑  英文  歌唱  班  昨日  在社教  馆  举行  「  英文  怀念  金曲  演唱  会  」  ，  
+
+2019-04-03 13:39:51 INFO     Saving best checkpoint....
+2019-04-03 13:40:29 INFO     global_step = 1300
+2019-04-03 13:40:29 INFO     unsupervised_loss = 4.770486
+2019-04-03 13:41:08 INFO     global_step = 1400
+2019-04-03 13:41:08 INFO     unsupervised_loss = 4.724434
+2019-04-03 13:41:50 INFO     global_step = 1500
+2019-04-03 13:41:50 INFO     unsupervised_loss = 4.717248
+2019-04-03 13:42:30 INFO     global_step = 1600
+2019-04-03 13:42:30 INFO     unsupervised_loss = 4.720593
+2019-04-03 13:42:31 INFO     Saving checkpoint models/unsupervised-as-4...
+2019-04-03 13:42:47 INFO     Bash Command: bash run.sh valid as 4
+2019-04-03 13:43:05 INFO     Validation results:
+1.0.0
+=== SUMMARY:
+=== TOTAL INSERTIONS:	6030
+=== TOTAL DELETIONS:	8960
+=== TOTAL SUBSTITUTIONS:	19862
+=== TOTAL NCHANGE:	34852
+=== TOTAL TRUE WORD COUNT:	122610
+=== TOTAL TEST WORD COUNT:	119680
+=== TOTAL TRUE WORDS RECALL:	0.765
+=== TOTAL TEST WORDS PRECISION:	0.784
+=== F MEASURE:	0.774
+=== OOV Rate:	1.000
+=== OOV Recall Rate:	0.765
+=== IV Recall Rate:	--
+Examples:
+许多  社区长青  学苑  多  开设  有  书法  、  插花  、  土风舞  班  ，  
+文山  区长  青  学苑  则  有个  十分  特别  的  「  英文  歌唱  班  」  ，  
+成员  年龄  均  超过  六十  岁  ，  
+这  群白发  苍苍  ，  
+爷爷  、  奶奶  级  的  学员  唱起  英文歌  来  字  正  腔圆  ，  
+有  模有样  。  
+对  他  们  来说  ，  
+能  与  一群  志同道  合  的  朋友  共同  回味  年少  时期  流行  的  歌曲  ，  
+才是  参加  英文  歌唱  班  最大  乐趣  。  
+长青  学苑  英文  歌唱  班  昨日  在  社教  馆  举行  「  英文  怀念  金曲  演唱  会  」  ，  
+
+2019-04-03 13:43:05 INFO     Saving best checkpoint....
+2019-04-03 13:43:43 INFO     global_step = 1700
+2019-04-03 13:43:43 INFO     unsupervised_loss = 4.695361
+2019-04-03 13:44:24 INFO     global_step = 1800
+2019-04-03 13:44:24 INFO     unsupervised_loss = 4.684224
+2019-04-03 13:45:03 INFO     global_step = 1900
+2019-04-03 13:45:03 INFO     unsupervised_loss = 4.637012
+2019-04-03 13:45:43 INFO     global_step = 2000
+2019-04-03 13:45:43 INFO     unsupervised_loss = 4.640448
+2019-04-03 13:45:43 INFO     Saving checkpoint models/unsupervised-as-4...
+2019-04-03 13:45:58 INFO     Bash Command: bash run.sh valid as 4
+2019-04-03 13:46:15 INFO     Validation results:
+1.0.0
+=== SUMMARY:
+=== TOTAL INSERTIONS:	6867
+=== TOTAL DELETIONS:	8214
+=== TOTAL SUBSTITUTIONS:	19898
+=== TOTAL NCHANGE:	34979
+=== TOTAL TRUE WORD COUNT:	122610
+=== TOTAL TEST WORD COUNT:	121263
+=== TOTAL TRUE WORDS RECALL:	0.771
+=== TOTAL TEST WORDS PRECISION:	0.779
+=== F MEASURE:	0.775
+=== OOV Rate:	1.000
+=== OOV Recall Rate:	0.771
+=== IV Recall Rate:	--
+Examples:
+许多  社区  长青  学苑  多  开设  有  书法  、  插花  、  土风舞  班  ，  
+文山区  长青  学苑  则  有个  十分  特别  的  「  英文  歌唱  班  」  ，  
+成员  年龄  均  超过  六十  岁  ，  
+这  群白  发苍苍  ，  
+爷爷  、  奶奶  级  的  学员  唱起  英文歌  来  字正  腔圆  ，  
+有  模有样  。  
+对  他  们  来说  ，  
+能  与  一群  志同道  合  的  朋友  共同  回味  年少  时期  流行  的歌曲  ，  
+才是  参加  英文  歌唱  班  最大  乐趣  。  
+长青  学苑  英文  歌唱  班  昨日  在  社  教馆  举行  「  英文  怀念  金曲  演唱  会  」  ，  
+
+2019-04-03 13:46:15 INFO     Saving best checkpoint....
+2019-04-03 13:46:56 INFO     global_step = 2100
+2019-04-03 13:46:56 INFO     unsupervised_loss = 4.631148
+2019-04-03 13:47:35 INFO     global_step = 2200
+2019-04-03 13:47:35 INFO     unsupervised_loss = 4.609336
+2019-04-03 13:48:14 INFO     global_step = 2300
+2019-04-03 13:48:14 INFO     unsupervised_loss = 4.598384
+2019-04-03 13:48:54 INFO     global_step = 2400
+2019-04-03 13:48:54 INFO     unsupervised_loss = 4.605572
+2019-04-03 13:48:54 INFO     Saving checkpoint models/unsupervised-as-4...
+2019-04-03 13:49:09 INFO     Bash Command: bash run.sh valid as 4
+2019-04-03 13:49:27 INFO     Validation results:
+1.0.0
+=== SUMMARY:
+=== TOTAL INSERTIONS:	7774
+=== TOTAL DELETIONS:	6874
+=== TOTAL SUBSTITUTIONS:	18997
+=== TOTAL NCHANGE:	33645
+=== TOTAL TRUE WORD COUNT:	122610
+=== TOTAL TEST WORD COUNT:	123510
+=== TOTAL TRUE WORDS RECALL:	0.789
+=== TOTAL TEST WORDS PRECISION:	0.783
+=== F MEASURE:	0.786
+=== OOV Rate:	1.000
+=== OOV Recall Rate:	0.789
+=== IV Recall Rate:	--
+Examples:
+许多  社区长  青  学苑  多  开设  有  书法  、  插花  、  土风舞  班  ，  
+文山区  长青  学苑  则  有个  十分  特别  的  「  英文  歌唱  班  」  ，  
+成员  年龄  均  超过  六  十  岁  ，  
+这  群白  发苍苍  ，  
+爷爷  、  奶奶  级  的  学员  唱  起  英文歌  来  字  正  腔圆  ，  
+有  模有样  。  
+对  他  们  来说  ，  
+能  与  一群  志同道  合  的  朋友  共同  回味  年少  时期  流行  的  歌曲  ，  
+才  是  参加  英文  歌唱  班  最大  乐趣  。  
+长青  学苑  英文  歌唱  班  昨日  在  社教  馆  举行  「  英文  怀念  金曲  演唱  会  」  ，  
+
+2019-04-03 13:49:27 INFO     Saving best checkpoint....
+2019-04-03 13:50:05 INFO     global_step = 2500
+2019-04-03 13:50:05 INFO     unsupervised_loss = 4.594917
+2019-04-03 13:50:48 INFO     global_step = 2600
+2019-04-03 13:50:48 INFO     unsupervised_loss = 4.616162
+2019-04-03 13:51:29 INFO     global_step = 2700
+2019-04-03 13:51:29 INFO     unsupervised_loss = 4.614063
+2019-04-03 13:52:10 INFO     global_step = 2800
+2019-04-03 13:52:10 INFO     unsupervised_loss = 4.602446
+2019-04-03 13:52:11 INFO     Saving checkpoint models/unsupervised-as-4...
+2019-04-03 13:52:25 INFO     Bash Command: bash run.sh valid as 4
+2019-04-03 13:52:43 INFO     Validation results:
+1.0.0
+=== SUMMARY:
+=== TOTAL INSERTIONS:	9420
+=== TOTAL DELETIONS:	5662
+=== TOTAL SUBSTITUTIONS:	18436
+=== TOTAL NCHANGE:	33518
+=== TOTAL TRUE WORD COUNT:	122610
+=== TOTAL TEST WORD COUNT:	126368
+=== TOTAL TRUE WORDS RECALL:	0.803
+=== TOTAL TEST WORDS PRECISION:	0.780
+=== F MEASURE:	0.791
+=== OOV Rate:	1.000
+=== OOV Recall Rate:	0.803
+=== IV Recall Rate:	--
+Examples:
+许多  社区  长青  学苑  多  开设  有  书法  、  插花  、  土风舞  班  ，  
+文山区  长青  学苑  则  有个  十分  特别  的  「  英文  歌唱  班  」  ，  
+成员  年龄  均  超过  六  十  岁  ，  
+这  群白  发苍  苍  ，  
+爷爷  、  奶奶  级  的  学员  唱起  英文  歌  来  字  正  腔圆  ，  
+有  模有样  。  
+对  他  们  来说  ，  
+能  与  一群  志同道  合  的  朋友  共同  回味  年少  时期  流行  的歌曲  ，  
+才  是  参加  英文  歌唱  班  最大  乐趣  。  
+长青  学苑  英文  歌唱  班  昨日  在  社教  馆  举行  「  英文  怀念  金曲  演唱  会  」  ，  
+
+2019-04-03 13:52:43 INFO     Saving best checkpoint....
+2019-04-03 13:53:24 INFO     global_step = 2900
+2019-04-03 13:53:24 INFO     unsupervised_loss = 4.574204
+2019-04-03 13:54:03 INFO     global_step = 3000
+2019-04-03 13:54:03 INFO     unsupervised_loss = 4.565811
+2019-04-03 13:54:48 INFO     global_step = 3100
+2019-04-03 13:54:48 INFO     unsupervised_loss = 4.568950
+2019-04-03 13:55:29 INFO     global_step = 3200
+2019-04-03 13:55:29 INFO     unsupervised_loss = 4.576439
+2019-04-03 13:55:30 INFO     Saving checkpoint models/unsupervised-as-4...
+2019-04-03 13:55:44 INFO     Bash Command: bash run.sh valid as 4
+2019-04-03 13:56:02 INFO     Validation results:
+1.0.0
+=== SUMMARY:
+=== TOTAL INSERTIONS:	9514
+=== TOTAL DELETIONS:	5731
+=== TOTAL SUBSTITUTIONS:	18513
+=== TOTAL NCHANGE:	33758
+=== TOTAL TRUE WORD COUNT:	122610
+=== TOTAL TEST WORD COUNT:	126393
+=== TOTAL TRUE WORDS RECALL:	0.802
+=== TOTAL TEST WORDS PRECISION:	0.778
+=== F MEASURE:	0.790
+=== OOV Rate:	1.000
+=== OOV Recall Rate:	0.802
+=== IV Recall Rate:	--
+Examples:
+许多  社区  长青  学苑  多  开设  有  书法  、  插花  、  土风舞  班  ，  
+文山  区  长青  学苑  则  有个  十分  特别  的  「  英文  歌唱  班  」  ，  
+成员  年龄  均  超过  六  十  岁  ，  
+这  群白  发苍苍  ，  
+爷爷  、  奶奶  级  的  学员  唱起  英文  歌  来  字  正  腔圆  ，  
+有  模有样  。  
+对  他  们  来说  ，  
+能  与  一群  志同道  合的  朋友  共同  回味  年少  时期  流行  的  歌曲  ，  
+才  是  参加  英文  歌唱  班  最大  乐趣  。  
+长青  学苑  英文  歌唱  班  昨日  在  社  教馆  举行  「  英文  怀念  金曲  演唱  会  」  ，  
+
+2019-04-03 13:56:40 INFO     global_step = 3300
+2019-04-03 13:56:40 INFO     unsupervised_loss = 4.541090
+2019-04-03 13:57:19 INFO     global_step = 3400
+2019-04-03 13:57:19 INFO     unsupervised_loss = 4.556831
+2019-04-03 13:57:58 INFO     global_step = 3500
+2019-04-03 13:57:58 INFO     unsupervised_loss = 4.549351
+2019-04-03 13:58:40 INFO     global_step = 3600
+2019-04-03 13:58:40 INFO     unsupervised_loss = 4.557310
+2019-04-03 13:58:41 INFO     Saving checkpoint models/unsupervised-as-4...
+2019-04-03 13:58:55 INFO     Bash Command: bash run.sh valid as 4
+2019-04-03 13:59:13 INFO     Validation results:
+1.0.0
+=== SUMMARY:
+=== TOTAL INSERTIONS:	9724
+=== TOTAL DELETIONS:	5362
+=== TOTAL SUBSTITUTIONS:	18241
+=== TOTAL NCHANGE:	33327
+=== TOTAL TRUE WORD COUNT:	122610
+=== TOTAL TEST WORD COUNT:	126972
+=== TOTAL TRUE WORDS RECALL:	0.807
+=== TOTAL TEST WORDS PRECISION:	0.780
+=== F MEASURE:	0.793
+=== OOV Rate:	1.000
+=== OOV Recall Rate:	0.807
+=== IV Recall Rate:	--
+Examples:
+许多  社区  长青  学苑  多  开设  有  书法  、  插花  、  土风舞  班  ，  
+文山区  长青  学苑  则  有个  十分  特别  的  「  英文  歌唱  班  」  ，  
+成员  年龄  均  超过  六  十  岁  ，  
+这  群白  发苍苍  ，  
+爷爷  、  奶奶  级  的  学员  唱  起  英文  歌  来  字正  腔圆  ，  
+有  模有样  。  
+对  他  们  来说  ，  
+能  与  一群  志同道  合  的  朋友  共同  回味  年少  时期  流行  的  歌曲  ，  
+才  是  参加  英文  歌唱  班  最  大  乐趣  。  
+长青  学苑  英文  歌唱  班  昨日  在  社  教  馆  举行  「  英文  怀念  金曲  演唱  会  」  ，  
+
+2019-04-03 13:59:13 INFO     Saving best checkpoint....
+2019-04-03 13:59:53 INFO     global_step = 3700
+2019-04-03 13:59:53 INFO     unsupervised_loss = 4.578177
+2019-04-03 14:00:31 INFO     global_step = 3800
+2019-04-03 14:00:31 INFO     unsupervised_loss = 4.529426
+2019-04-03 14:01:11 INFO     global_step = 3900
+2019-04-03 14:01:11 INFO     unsupervised_loss = 4.552402
+2019-04-03 14:01:52 INFO     global_step = 4000
+2019-04-03 14:01:52 INFO     unsupervised_loss = 4.559526
+2019-04-03 14:01:52 INFO     Saving checkpoint models/unsupervised-as-4...
+2019-04-03 14:02:07 INFO     Bash Command: bash run.sh valid as 4
+2019-04-03 14:02:25 INFO     Validation results:
+1.0.0
+=== SUMMARY:
+=== TOTAL INSERTIONS:	10065
+=== TOTAL DELETIONS:	5130
+=== TOTAL SUBSTITUTIONS:	18177
+=== TOTAL NCHANGE:	33372
+=== TOTAL TRUE WORD COUNT:	122610
+=== TOTAL TEST WORD COUNT:	127545
+=== TOTAL TRUE WORDS RECALL:	0.810
+=== TOTAL TEST WORDS PRECISION:	0.779
+=== F MEASURE:	0.794
+=== OOV Rate:	1.000
+=== OOV Recall Rate:	0.810
+=== IV Recall Rate:	--
+Examples:
+许多  社区  长青  学苑  多  开设  有  书法  、  插花  、  土  风舞  班  ，  
+文山区  长青  学苑  则  有个  十分  特别  的  「  英文  歌唱  班  」  ，  
+成员  年龄  均  超过  六  十  岁  ，  
+这  群  白  发苍  苍  ，  
+爷爷  、  奶奶  级  的  学员  唱  起  英文歌  来  字  正  腔圆  ，  
+有  模有样  。  
+对  他  们  来说  ，  
+能  与  一群  志同道  合  的  朋友  共同  回味  年少  时期  流行  的  歌曲  ，  
+才  是  参加  英文  歌唱  班  最  大  乐趣  。  
+长青  学苑  英文  歌唱  班  昨日  在  社  教馆  举行  「  英文  怀念  金曲  演唱  会  」  ，  
+
+2019-04-03 14:02:25 INFO     Saving best checkpoint....
+2019-04-03 14:03:02 INFO     global_step = 4100
+2019-04-03 14:03:02 INFO     unsupervised_loss = 4.554259
+2019-04-03 14:03:44 INFO     global_step = 4200
+2019-04-03 14:03:44 INFO     unsupervised_loss = 4.550804
+2019-04-03 14:04:23 INFO     global_step = 4300
+2019-04-03 14:04:23 INFO     unsupervised_loss = 4.533982
+2019-04-03 14:05:03 INFO     global_step = 4400
+2019-04-03 14:05:03 INFO     unsupervised_loss = 4.556854
+2019-04-03 14:05:04 INFO     Saving checkpoint models/unsupervised-as-4...
+2019-04-03 14:05:19 INFO     Bash Command: bash run.sh valid as 4
+2019-04-03 14:05:37 INFO     Validation results:
+1.0.0
+=== SUMMARY:
+=== TOTAL INSERTIONS:	10337
+=== TOTAL DELETIONS:	4959
+=== TOTAL SUBSTITUTIONS:	18312
+=== TOTAL NCHANGE:	33608
+=== TOTAL TRUE WORD COUNT:	122610
+=== TOTAL TEST WORD COUNT:	127988
+=== TOTAL TRUE WORDS RECALL:	0.810
+=== TOTAL TEST WORDS PRECISION:	0.776
+=== F MEASURE:	0.793
+=== OOV Rate:	1.000
+=== OOV Recall Rate:	0.810
+=== IV Recall Rate:	--
+Examples:
+许多  社区  长青  学苑  多  开设  有  书法  、  插花  、  土风舞  班  ，  
+文山  区  长青  学苑  则  有个  十分  特别  的  「  英文  歌唱  班  」  ，  
+成员  年龄  均  超过  六  十  岁  ，  
+这  群白  发苍  苍  ，  
+爷爷  、  奶奶  级  的  学员  唱  起  英文歌  来  字正  腔圆  ，  
+有  模有样  。  
+对  他  们  来说  ，  
+能  与  一群  志同道  合  的  朋友  共同  回味  年少  时期  流行  的  歌曲  ，  
+才  是  参加  英文  歌唱  班  最  大  乐趣  。  
+长青  学苑  英文  歌唱  班  昨日  在  社  教馆  举行  「  英文  怀念  金曲  演唱  会  」  ，  
+
+2019-04-03 14:06:16 INFO     global_step = 4500
+2019-04-03 14:06:16 INFO     unsupervised_loss = 4.545870
+2019-04-03 14:06:56 INFO     global_step = 4600
+2019-04-03 14:06:56 INFO     unsupervised_loss = 4.522304
+2019-04-03 14:07:36 INFO     global_step = 4700
+2019-04-03 14:07:36 INFO     unsupervised_loss = 4.553474
+2019-04-03 14:08:18 INFO     global_step = 4800
+2019-04-03 14:08:18 INFO     unsupervised_loss = 4.517148
+2019-04-03 14:08:18 INFO     Saving checkpoint models/unsupervised-as-4...
+2019-04-03 14:08:34 INFO     Bash Command: bash run.sh valid as 4
+2019-04-03 14:08:52 INFO     Validation results:
+1.0.0
+=== SUMMARY:
+=== TOTAL INSERTIONS:	10729
+=== TOTAL DELETIONS:	4573
+=== TOTAL SUBSTITUTIONS:	18066
+=== TOTAL NCHANGE:	33368
+=== TOTAL TRUE WORD COUNT:	122610
+=== TOTAL TEST WORD COUNT:	128766
+=== TOTAL TRUE WORDS RECALL:	0.815
+=== TOTAL TEST WORDS PRECISION:	0.776
+=== F MEASURE:	0.795
+=== OOV Rate:	1.000
+=== OOV Recall Rate:	0.815
+=== IV Recall Rate:	--
+Examples:
+许多  社区  长青  学苑  多  开设  有  书法  、  插花  、  土风舞  班  ，  
+文  山区  长青  学苑  则  有个  十分  特别  的  「  英文  歌唱  班  」  ，  
+成员  年龄  均  超过  六  十  岁  ，  
+这  群白  发苍  苍  ，  
+爷爷  、  奶奶  级  的  学员  唱  起  英文歌  来  字  正  腔圆  ，  
+有  模有样  。  
+对  他  们  来说  ，  
+能  与  一群  志同道  合  的  朋友  共同  回味  年少  时期  流行  的歌曲  ，  
+才  是  参加  英文  歌唱  班  最  大  乐趣  。  
+长青  学苑  英文  歌唱  班  昨日  在  社  教馆  举行  「  英文  怀念  金曲  演唱  会  」  ，  
+
+2019-04-03 14:08:52 INFO     Saving best checkpoint....
+2019-04-03 14:09:31 INFO     global_step = 4900
+2019-04-03 14:09:31 INFO     unsupervised_loss = 4.519214
+2019-04-03 14:10:09 INFO     global_step = 5000
+2019-04-03 14:10:09 INFO     unsupervised_loss = 4.471356
+2019-04-03 14:10:50 INFO     global_step = 5100
+2019-04-03 14:10:50 INFO     unsupervised_loss = 4.482940
+2019-04-03 14:11:32 INFO     global_step = 5200
+2019-04-03 14:11:32 INFO     unsupervised_loss = 4.459778
+2019-04-03 14:11:32 INFO     Saving checkpoint models/unsupervised-as-4...
+2019-04-03 14:11:47 INFO     Bash Command: bash run.sh valid as 4
+2019-04-03 14:12:05 INFO     Validation results:
+1.0.0
+=== SUMMARY:
+=== TOTAL INSERTIONS:	11024
+=== TOTAL DELETIONS:	4349
+=== TOTAL SUBSTITUTIONS:	17793
+=== TOTAL NCHANGE:	33166
+=== TOTAL TRUE WORD COUNT:	122610
+=== TOTAL TEST WORD COUNT:	129285
+=== TOTAL TRUE WORDS RECALL:	0.819
+=== TOTAL TEST WORDS PRECISION:	0.777
+=== F MEASURE:	0.798
+=== OOV Rate:	1.000
+=== OOV Recall Rate:	0.819
+=== IV Recall Rate:	--
+Examples:
+许多  社区  长青  学苑  多  开设  有  书法  、  插花  、  土风舞  班  ，  
+文  山区  长青  学苑  则  有个  十分  特别  的  「  英文  歌唱  班  」  ，  
+成员  年龄  均  超过  六  十  岁  ，  
+这  群白  发苍  苍  ，  
+爷爷  、  奶奶  级  的  学员  唱  起  英文歌  来  字  正  腔圆  ，  
+有  模有样  。  
+对  他  们  来说  ，  
+能  与  一群  志同道  合  的  朋友  共同  回味  年少  时期  流行  的歌曲  ，  
+才  是  参加  英文  歌唱  班  最  大  乐趣  。  
+长青  学苑  英文  歌唱  班  昨日  在  社  教馆  举行  「  英文  怀念  金曲  演唱  会  」  ，  
+
+2019-04-03 14:12:05 INFO     Saving best checkpoint....
+2019-04-03 14:12:44 INFO     global_step = 5300
+2019-04-03 14:12:44 INFO     unsupervised_loss = 4.466878
+2019-04-03 14:13:28 INFO     global_step = 5400
+2019-04-03 14:13:28 INFO     unsupervised_loss = 4.473647
+2019-04-03 14:14:10 INFO     global_step = 5500
+2019-04-03 14:14:10 INFO     unsupervised_loss = 4.464954
+2019-04-03 14:14:50 INFO     global_step = 5600
+2019-04-03 14:14:50 INFO     unsupervised_loss = 4.475852
+2019-04-03 14:14:51 INFO     Saving checkpoint models/unsupervised-as-4...
+2019-04-03 14:15:05 INFO     Bash Command: bash run.sh valid as 4
+2019-04-03 14:15:23 INFO     Validation results:
+1.0.0
+=== SUMMARY:
+=== TOTAL INSERTIONS:	11034
+=== TOTAL DELETIONS:	4350
+=== TOTAL SUBSTITUTIONS:	17832
+=== TOTAL NCHANGE:	33216
+=== TOTAL TRUE WORD COUNT:	122610
+=== TOTAL TEST WORD COUNT:	129294
+=== TOTAL TRUE WORDS RECALL:	0.819
+=== TOTAL TEST WORDS PRECISION:	0.777
+=== F MEASURE:	0.797
+=== OOV Rate:	1.000
+=== OOV Recall Rate:	0.819
+=== IV Recall Rate:	--
+Examples:
+许多  社区  长青  学苑  多  开设  有  书法  、  插花  、  土风舞  班  ，  
+文  山区  长青  学苑  则  有个  十分  特别  的  「  英文  歌唱  班  」  ，  
+成员  年龄  均  超过  六  十  岁  ，  
+这  群白  发苍  苍  ，  
+爷爷  、  奶奶  级  的  学员  唱  起  英文歌  来  字  正  腔圆  ，  
+有  模有样  。  
+对  他  们  来说  ，  
+能  与  一群  志同道  合  的  朋友  共同  回味  年少  时期  流行  的歌曲  ，  
+才  是  参加  英文  歌唱  班  最  大  乐趣  。  
+长青  学苑  英文  歌唱  班  昨日  在  社  教馆  举行  「  英文  怀念  金曲  演唱  会  」  ，  
+
+2019-04-03 14:16:02 INFO     global_step = 5700
+2019-04-03 14:16:02 INFO     unsupervised_loss = 4.454011
+2019-04-03 14:16:43 INFO     global_step = 5800
+2019-04-03 14:16:43 INFO     unsupervised_loss = 4.474945
+2019-04-03 14:17:23 INFO     global_step = 5900
+2019-04-03 14:17:23 INFO     unsupervised_loss = 4.452472
+2019-04-03 14:18:02 INFO     Training Complete!
+2019-04-03 14:18:02 INFO     Saving final checkpoint models/unsupervised-as-4...
+2019-04-03 14:18:16 INFO     Bash Command: bash run.sh valid as 4
+2019-04-03 14:18:34 INFO     Validation results:
+1.0.0
+=== SUMMARY:
+=== TOTAL INSERTIONS:	11024
+=== TOTAL DELETIONS:	4338
+=== TOTAL SUBSTITUTIONS:	17796
+=== TOTAL NCHANGE:	33158
+=== TOTAL TRUE WORD COUNT:	122610
+=== TOTAL TEST WORD COUNT:	129296
+=== TOTAL TRUE WORDS RECALL:	0.819
+=== TOTAL TEST WORDS PRECISION:	0.777
+=== F MEASURE:	0.798
+=== OOV Rate:	1.000
+=== OOV Recall Rate:	0.819
+=== IV Recall Rate:	--
+Examples:
+许多  社区  长青  学苑  多  开设  有  书法  、  插花  、  土风舞  班  ，  
+文  山区  长青  学苑  则  有个  十分  特别  的  「  英文  歌唱  班  」  ，  
+成员  年龄  均  超过  六  十  岁  ，  
+这  群白  发苍  苍  ，  
+爷爷  、  奶奶  级  的  学员  唱  起  英文歌  来  字  正  腔圆  ，  
+有  模有样  。  
+对  他  们  来说  ，  
+能  与  一群  志同道  合  的  朋友  共同  回味  年少  时期  流行  的歌曲  ，  
+才  是  参加  英文  歌唱  班  最  大  乐趣  。  
+长青  学苑  英文  歌唱  班  昨日  在  社  教馆  举行  「  英文  怀念  金曲  演唱  会  」  ，  
+
+2019-04-03 14:18:34 INFO     Prepare prediction dataloader
+2019-04-03 14:18:34 INFO     #line: 14432
+2019-04-03 14:18:34 INFO     #sentence: 14998
+2019-04-03 14:18:34 INFO     #token: 222800
+2019-04-03 14:18:37 INFO     ##########Example 0##########
+2019-04-03 14:18:37 INFO     Characters: <BOS> 许 多 社 区 长 青 学 苑 多 开 设 有 书 法 、 插 花 、 土 风 舞 班 ， <\n>
+2019-04-03 14:18:37 INFO     Tokens: <BOS> 许 多 社 区 长 青 学 苑 多 开 设 有 书 法 <PUNC> 插 花 <PUNC> 土 风 舞 班 <PUNC> </s>
+2019-04-03 14:18:37 INFO     Segments: 23
+2019-04-03 14:18:37 INFO     ##########Example 1##########
+2019-04-03 14:18:37 INFO     Characters: <BOS> 文 山 区 长 青 学 苑 则 有 个 十 分 特 别 的 「 英 文 歌 唱 班 」  ， <\n>
+2019-04-03 14:18:37 INFO     Tokens: <BOS> 文 山 区 长 青 学 苑 则 有 个 十 分 特 别 的 <PUNC> 英 文 歌 唱 班 <PUNC> </s>
+2019-04-03 14:18:37 INFO     Segments: 22
+2019-04-03 14:18:37 INFO     ##########Example 2##########
+2019-04-03 14:18:37 INFO     Characters: <BOS> 成 员 年 龄 均 超 过 六 十 岁 ， <\n>
+2019-04-03 14:18:37 INFO     Tokens: <BOS> 成 员 年 龄 均 超 过 六 十 岁 <PUNC> </s>
+2019-04-03 14:18:37 INFO     Segments: 11
+2019-04-03 14:18:37 INFO     ##########Example 3##########
+2019-04-03 14:18:37 INFO     Characters: <BOS> 这 群 白 发 苍 苍 ， <\n>
+2019-04-03 14:18:37 INFO     Tokens: <BOS> 这 群 白 发 苍 苍 <PUNC> </s>
+2019-04-03 14:18:37 INFO     Segments: 7
+2019-04-03 14:18:37 INFO     ##########Example 4##########
+2019-04-03 14:18:37 INFO     Characters: <BOS> 爷 爷 、 奶 奶 级 的 学 员 唱 起 英 文 歌 来 字 正 腔 圆 ， <\n>
+2019-04-03 14:18:37 INFO     Tokens: <BOS> 爷 爷 <PUNC> 奶 奶 级 的 学 员 唱 起 英 文 歌 来 字 正 腔 圆 <PUNC> </s>
+2019-04-03 14:18:37 INFO     Segments: 20
+2019-04-03 14:18:37 INFO     ##########Example 5##########
+2019-04-03 14:18:37 INFO     Characters: <BOS> 有 模 有 样 。 <\n>
+2019-04-03 14:18:37 INFO     Tokens: <BOS> 有 模 有 样 <PUNC> </s>
+2019-04-03 14:18:37 INFO     Segments: 5
+2019-04-03 14:18:37 INFO     ##########Example 6##########
+2019-04-03 14:18:37 INFO     Characters: <BOS> 对 他 们 来 说 ， <\n>
+2019-04-03 14:18:37 INFO     Tokens: <BOS> 对 他 们 来 说 <PUNC> </s>
+2019-04-03 14:18:37 INFO     Segments: 6
+2019-04-03 14:18:37 INFO     ##########Example 7##########
+2019-04-03 14:18:37 INFO     Characters: <BOS> 能 与 一 群 志 同 道 合 的 朋 友 共 同 回 味 年 少 时 期 流 行 的 歌 曲 ， <\n>
+2019-04-03 14:18:37 INFO     Tokens: <BOS> 能 与 一 群 志 同 道 合 的 朋 友 共 同 回 味 年 少 时 期 流 行 的 歌 曲 <PUNC> </s>
+2019-04-03 14:18:37 INFO     Segments: 25
+2019-04-03 14:18:37 INFO     ##########Example 8##########
+2019-04-03 14:18:37 INFO     Characters: <BOS> 才 是 参 加 英 文 歌 唱 班 最 大 乐 趣 。 <\n>
+2019-04-03 14:18:37 INFO     Tokens: <BOS> 才 是 参 加 英 文 歌 唱 班 最 大 乐 趣 <PUNC> </s>
+2019-04-03 14:18:37 INFO     Segments: 14
+2019-04-03 14:18:37 INFO     ##########Example 9##########
+2019-04-03 14:18:37 INFO     Characters: <BOS> 长 青 学 苑 英 文 歌 唱 班 昨 日 在 社 教 馆 举 行 「 英 文 怀 念 金 曲 演 唱 会 」  ， <\n>
+2019-04-03 14:18:37 INFO     Tokens: <BOS> 长 青 学 苑 英 文 歌 唱 班 昨 日 在 社 教 馆 举 行 <PUNC> 英 文 怀 念 金 曲 演 唱 会 <PUNC> </s>
+2019-04-03 14:18:37 INFO     Segments: 28
+2019-04-03 14:18:37 INFO     Loading checkpoint None...
+2019-04-03 14:18:37 INFO     Model Info:
+SegmentalLM(
+  (embedding): Embedding(8677, 256)
+  (embedding2vocab): Linear(in_features=256, out_features=8677, bias=True)
+  (context_encoder): ContextEncoder(
+    (rnn): LSTM(256, 256, num_layers=2, dropout=0.1)
+  )
+  (segment_decoder): SegmentDecoder(
+    (rnn): LSTM(256, 256, num_layers=2, dropout=0.1)
+    (output_dropout): Dropout(p=0.1)
+  )
+  (decoder_h_transformation): Linear(in_features=256, out_features=512, bias=True)
+  (encoder_input_dropout): Dropout(p=0.1)
+  (decoder_input_dropout): Dropout(p=0.2)
+  (y0_transformation): Linear(in_features=256, out_features=256, bias=True)
+)
+2019-04-03 14:18:37 INFO     Global step: 5200
+2019-04-03 14:18:50 INFO     Bash Command: bash run.sh valid as 4
+2019-04-03 14:19:07 INFO     Test evaluation results:
+1.0.0
+=== SUMMARY:
+=== TOTAL INSERTIONS:	11024
+=== TOTAL DELETIONS:	4338
+=== TOTAL SUBSTITUTIONS:	17796
+=== TOTAL NCHANGE:	33158
+=== TOTAL TRUE WORD COUNT:	122610
+=== TOTAL TEST WORD COUNT:	129296
+=== TOTAL TRUE WORDS RECALL:	0.819
+=== TOTAL TEST WORDS PRECISION:	0.777
+=== F MEASURE:	0.798
+=== OOV Rate:	1.000
+=== OOV Recall Rate:	0.819
+=== IV Recall Rate:	--
+Examples:
+许多  社区  长青  学苑  多  开设  有  书法  、  插花  、  土风舞  班  ，  
+文  山区  长青  学苑  则  有个  十分  特别  的  「  英文  歌唱  班  」  ，  
+成员  年龄  均  超过  六  十  岁  ，  
+这  群白  发苍  苍  ，  
+爷爷  、  奶奶  级  的  学员  唱  起  英文歌  来  字  正  腔圆  ，  
+有  模有样  。  
+对  他  们  来说  ，  
+能  与  一群  志同道  合  的  朋友  共同  回味  年少  时期  流行  的歌曲  ，  
+才  是  参加  英文  歌唱  班  最  大  乐趣  。  
+长青  学苑  英文  歌唱  班  昨日  在  社  教馆  举行  「  英文  怀念  金曲  演唱  会  」  ，  
+

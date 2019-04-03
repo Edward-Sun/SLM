@@ -1,0 +1,795 @@
+2019-04-03 20:50:01 INFO     Namespace(adam_learning_rate=0.005, bos_token='<BOS>', config_file='models/slm_msr_3_config.json', cpu_num=4, do_predict=True, do_supervised=False, do_unsupervised=True, do_valid=True, english_token='<ENG>', eos_token='</s>', gradient_clip=0.1, init_checkpoint=None, init_embedding_path='data/vocab/embedding.npy', log_every_steps=100, max_seq_length=32, number_token='<NUM>', predict_batch_size=500, predict_inputs=['data/msr/test.txt'], predict_output='models/unsupervised-msr-3/prediction.txt', punctuation_token='<PUNC>', save_every_steps=400, save_path='models/unsupervised-msr-3', segment_token='  ', segmented=None, sgd_learning_rate=16.0, supervised_batch_size=1000, supervised_lambda=1.0, train_steps=6000, unsegmented=['data/msr/unsegmented.txt', 'data/msr/test.txt'], unsupervised_batch_size=16000, use_cuda=True, valid_batch_size=500, valid_inputs=['data/msr/test.txt'], valid_output='models/unsupervised-msr-3/valid_prediction.txt', vocab_file='data/vocab/vocab.txt', warm_up_steps=800)
+2019-04-03 20:50:01 INFO     Loading init embedding from data/vocab/embedding.npy...
+2019-04-03 20:50:01 INFO     Config Info:
+{
+  "decoder_dropout_rate": 0.1,
+  "decoder_input_dropout_rate": 0.2,
+  "decoder_layer_number": 2,
+  "embedding_size": 256,
+  "encoder_dropout_rate": 0.2,
+  "encoder_input_dropout_rate": 0.1,
+  "encoder_layer_number": 2,
+  "eng_id": 7,
+  "eos_id": 5,
+  "hidden_size": 256,
+  "max_segment_length": 3,
+  "num_id": 3,
+  "punc_id": 2,
+  "vocab_size": 8677
+}
+2019-04-03 20:50:01 INFO     Model Info:
+SegmentalLM(
+  (embedding): Embedding(8677, 256)
+  (embedding2vocab): Linear(in_features=256, out_features=8677, bias=True)
+  (context_encoder): ContextEncoder(
+    (rnn): LSTM(256, 256, num_layers=2, dropout=0.2)
+  )
+  (segment_decoder): SegmentDecoder(
+    (rnn): LSTM(256, 256, num_layers=2, dropout=0.1)
+    (output_dropout): Dropout(p=0.1)
+  )
+  (decoder_h_transformation): Linear(in_features=256, out_features=512, bias=True)
+  (encoder_input_dropout): Dropout(p=0.1)
+  (decoder_input_dropout): Dropout(p=0.2)
+  (start_of_segment): Linear(in_features=256, out_features=256, bias=True)
+)
+2019-04-03 20:50:07 INFO     Prepare unsupervised dataloader
+2019-04-03 20:50:35 INFO     #line: 90909
+2019-04-03 20:50:35 INFO     #sentence: 291768
+2019-04-03 20:50:35 INFO     #token: 4720758
+2019-04-03 20:50:36 INFO     ##########Example 0##########
+2019-04-03 20:50:36 INFO     Characters: <BOS> “ 人 们 常 说 生 活 是 一 部 教 科 书 ， 
+2019-04-03 20:50:36 INFO     Tokens: <BOS> <PUNC> 人 们 常 说 生 活 是 一 部 教 科 书 <PUNC> </s>
+2019-04-03 20:50:36 INFO     Segments: 14
+2019-04-03 20:50:36 INFO     ##########Example 1##########
+2019-04-03 20:50:36 INFO     Characters: <BOS> 而 血 与 火 的 战 争 更 是 不 可 多 得 的 教 科 书 ， 
+2019-04-03 20:50:36 INFO     Tokens: <BOS> 而 血 与 火 的 战 争 更 是 不 可 多 得 的 教 科 书 <PUNC> </s>
+2019-04-03 20:50:36 INFO     Segments: 18
+2019-04-03 20:50:36 INFO     ##########Example 2##########
+2019-04-03 20:50:36 INFO     Characters: <BOS> 她 确 实 是 名 副 其 实 的 ‘ 我 的 大 学 ’  。 <\n>
+2019-04-03 20:50:36 INFO     Tokens: <BOS> 她 确 实 是 名 副 其 实 的 <PUNC> 我 的 大 学 <PUNC> </s>
+2019-04-03 20:50:36 INFO     Segments: 15
+2019-04-03 20:50:36 INFO     ##########Example 3##########
+2019-04-03 20:50:36 INFO     Characters: <BOS> “ 心 静 渐 知 春 似 海 ， 
+2019-04-03 20:50:36 INFO     Tokens: <BOS> <PUNC> 心 静 渐 知 春 似 海 <PUNC> </s>
+2019-04-03 20:50:36 INFO     Segments: 9
+2019-04-03 20:50:36 INFO     ##########Example 4##########
+2019-04-03 20:50:36 INFO     Characters: <BOS> 花 深 每 觉 影 生 香 。 <\n>
+2019-04-03 20:50:36 INFO     Tokens: <BOS> 花 深 每 觉 影 生 香 <PUNC> </s>
+2019-04-03 20:50:36 INFO     Segments: 8
+2019-04-03 20:50:36 INFO     ##########Example 5##########
+2019-04-03 20:50:36 INFO     Characters: <BOS> “ 吃 屎 的 东 西 ， 
+2019-04-03 20:50:36 INFO     Tokens: <BOS> <PUNC> 吃 屎 的 东 西 <PUNC> </s>
+2019-04-03 20:50:36 INFO     Segments: 7
+2019-04-03 20:50:36 INFO     ##########Example 6##########
+2019-04-03 20:50:36 INFO     Characters: <BOS> 连 一 捆 麦 也 铡 不 动 呀 ？ <\n>
+2019-04-03 20:50:36 INFO     Tokens: <BOS> 连 一 捆 麦 也 铡 不 动 呀 <PUNC> </s>
+2019-04-03 20:50:36 INFO     Segments: 10
+2019-04-03 20:50:36 INFO     ##########Example 7##########
+2019-04-03 20:50:36 INFO     Characters: <BOS> 他 “ 严 格 要 求 自 己 ， 
+2019-04-03 20:50:36 INFO     Tokens: <BOS> 他 <PUNC> 严 格 要 求 自 己 <PUNC> </s>
+2019-04-03 20:50:36 INFO     Segments: 9
+2019-04-03 20:50:36 INFO     ##########Example 8##########
+2019-04-03 20:50:36 INFO     Characters: <BOS> 从 一 个 科 举 出 身 的 进 士 成 为 一 个 伟 大 的 民 主 主 义 者 ， 
+2019-04-03 20:50:36 INFO     Tokens: <BOS> 从 一 个 科 举 出 身 的 进 士 成 为 一 个 伟 大 的 民 主 主 义 者 <PUNC> </s>
+2019-04-03 20:50:36 INFO     Segments: 23
+2019-04-03 20:50:36 INFO     ##########Example 9##########
+2019-04-03 20:50:36 INFO     Characters: <BOS> 进 而 成 为 一 位 杰 出 的 党 外 共 产 主 义 战 士 ， 
+2019-04-03 20:50:36 INFO     Tokens: <BOS> 进 而 成 为 一 位 杰 出 的 党 外 共 产 主 义 战 士 <PUNC> </s>
+2019-04-03 20:50:36 INFO     Segments: 18
+2019-04-03 20:50:40 INFO     Bucket batch sizes: 2285,1600,1333,1066,888,761,592,500
+2019-04-03 20:50:40 INFO     Prepare validation dataloader
+2019-04-03 20:50:42 INFO     #line: 3985
+2019-04-03 20:50:42 INFO     #sentence: 12820
+2019-04-03 20:50:42 INFO     #token: 205820
+2019-04-03 20:50:42 INFO     ##########Example 0##########
+2019-04-03 20:50:42 INFO     Characters: <BOS> 扬 帆 远 东 做 与 中 国 合 作 的 先 行 <\n>
+2019-04-03 20:50:42 INFO     Tokens: <BOS> 扬 帆 远 东 做 与 中 国 合 作 的 先 行 </s>
+2019-04-03 20:50:42 INFO     Segments: 13
+2019-04-03 20:50:42 INFO     ##########Example 1##########
+2019-04-03 20:50:42 INFO     Characters: <BOS> 希 腊 的 经 济 结 构 较 特 殊 。 <\n>
+2019-04-03 20:50:42 INFO     Tokens: <BOS> 希 腊 的 经 济 结 构 较 特 殊 <PUNC> </s>
+2019-04-03 20:50:42 INFO     Segments: 11
+2019-04-03 20:50:42 INFO     ##########Example 2##########
+2019-04-03 20:50:42 INFO     Characters: <BOS> 海 运 业 雄 踞 全 球 之 首 ， 
+2019-04-03 20:50:42 INFO     Tokens: <BOS> 海 运 业 雄 踞 全 球 之 首 <PUNC> </s>
+2019-04-03 20:50:42 INFO     Segments: 10
+2019-04-03 20:50:42 INFO     ##########Example 3##########
+2019-04-03 20:50:42 INFO     Characters: <BOS> 按 吨 位 计 占 世 界 总 数 的 １７％ 。 <\n>
+2019-04-03 20:50:42 INFO     Tokens: <BOS> 按 吨 位 计 占 世 界 总 数 的 <NUM> <PUNC> </s>
+2019-04-03 20:50:42 INFO     Segments: 12
+2019-04-03 20:50:42 INFO     ##########Example 4##########
+2019-04-03 20:50:42 INFO     Characters: <BOS> 另 外 旅 游 、 侨 汇 也 是 经 济 收 入 的 重 要 组 成 部 分 ， 
+2019-04-03 20:50:42 INFO     Tokens: <BOS> 另 外 旅 游 <PUNC> 侨 汇 也 是 经 济 收 入 的 重 要 组 成 部 分 <PUNC> </s>
+2019-04-03 20:50:42 INFO     Segments: 21
+2019-04-03 20:50:42 INFO     ##########Example 5##########
+2019-04-03 20:50:42 INFO     Characters: <BOS> 制 造 业 规 模 相 对 较 小 。 <\n>
+2019-04-03 20:50:42 INFO     Tokens: <BOS> 制 造 业 规 模 相 对 较 小 <PUNC> </s>
+2019-04-03 20:50:42 INFO     Segments: 10
+2019-04-03 20:50:42 INFO     ##########Example 6##########
+2019-04-03 20:50:42 INFO     Characters: <BOS> 多 年 来 ， 
+2019-04-03 20:50:42 INFO     Tokens: <BOS> 多 年 来 <PUNC> </s>
+2019-04-03 20:50:42 INFO     Segments: 4
+2019-04-03 20:50:42 INFO     ##########Example 7##########
+2019-04-03 20:50:42 INFO     Characters: <BOS> 中 希 贸 易 始 终 处 于 较 低 的 水 平 ， 
+2019-04-03 20:50:42 INFO     Tokens: <BOS> 中 希 贸 易 始 终 处 于 较 低 的 水 平 <PUNC> </s>
+2019-04-03 20:50:42 INFO     Segments: 14
+2019-04-03 20:50:42 INFO     ##########Example 8##########
+2019-04-03 20:50:42 INFO     Characters: <BOS> 希 腊 几 乎 没 有 在 中 国 投 资 。 <\n>
+2019-04-03 20:50:42 INFO     Tokens: <BOS> 希 腊 几 乎 没 有 在 中 国 投 资 <PUNC> </s>
+2019-04-03 20:50:42 INFO     Segments: 12
+2019-04-03 20:50:42 INFO     ##########Example 9##########
+2019-04-03 20:50:42 INFO     Characters: <BOS> 十 几 年 来 ， 
+2019-04-03 20:50:42 INFO     Tokens: <BOS> 十 几 年 来 <PUNC> </s>
+2019-04-03 20:50:42 INFO     Segments: 5
+2019-04-03 20:50:42 INFO     Ramdomly Initializing SLM parameters...
+2019-04-03 20:50:43 INFO     global_step = 0
+2019-04-03 20:50:43 INFO     unsupervised_loss = 15.027427
+2019-04-03 20:50:43 INFO     Saving checkpoint models/unsupervised-msr-3...
+2019-04-03 20:50:58 INFO     Bash Command: bash run.sh valid msr 3
+2019-04-03 20:51:15 INFO     Validation results:
+1.0.0
+=== SUMMARY:
+=== TOTAL INSERTIONS:	73139
+=== TOTAL DELETIONS:	256
+=== TOTAL SUBSTITUTIONS:	58770
+=== TOTAL NCHANGE:	132165
+=== TOTAL TRUE WORD COUNT:	106873
+=== TOTAL TEST WORD COUNT:	179756
+=== TOTAL TRUE WORDS RECALL:	0.448
+=== TOTAL TEST WORDS PRECISION:	0.266
+=== F MEASURE:	0.334
+=== OOV Rate:	0.026
+=== OOV Recall Rate:	0.065
+=== IV Recall Rate:	0.458
+Examples:
+扬  帆  远  东  做  与  中  国  合  作  的  先  行  
+希  腊  的  经  济  结  构  较  特  殊  。  
+海  运  业  雄  踞  全  球  之  首  ，  按  吨  位  计  占  世  界  总  数  的  １７％  。  
+另  外  旅  游  、  侨  汇  也  是  经  济  收  入  的  重  要  组  成  部  分  ，  制  造  业  规  模  相  对  较  小  。  
+多  年  来  ，  中  希  贸  易  始  终  处  于  较  低  的  水  平  ，  希  腊  几  乎  没  有  在  中  国  投  资  。  
+十  几  年  来  ，  改  革  开  放  的  中  国  经  济  高  速  发  展  ，  远  东  在  崛  起  。  
+瓦  西  里  斯  的  船  只  中  有  ４０％  驶  向  远  东  ，  每  个  月  几  乎  都  有  两  三  条  船  停  靠  中  国  港  口  。  
+他  感  受  到  了  中  国  经  济  发  展  的  大  潮  。  
+他  要  与  中  国  人  合  作  。  
+他  来  到  中  国  ，  成  为  第  一  个  访  华  的  大  船  主  。  
+
+2019-04-03 20:51:15 INFO     Overwriting best checkpoint....
+2019-04-03 20:51:50 INFO     global_step = 100
+2019-04-03 20:51:50 INFO     unsupervised_loss = 8.722998
+2019-04-03 20:52:23 INFO     global_step = 200
+2019-04-03 20:52:23 INFO     unsupervised_loss = 6.105887
+2019-04-03 20:52:58 INFO     global_step = 300
+2019-04-03 20:52:58 INFO     unsupervised_loss = 5.501581
+2019-04-03 20:53:32 INFO     global_step = 400
+2019-04-03 20:53:32 INFO     unsupervised_loss = 5.293769
+2019-04-03 20:53:32 INFO     Saving checkpoint models/unsupervised-msr-3...
+2019-04-03 20:53:48 INFO     Bash Command: bash run.sh valid msr 3
+2019-04-03 20:54:06 INFO     Validation results:
+1.0.0
+=== SUMMARY:
+=== TOTAL INSERTIONS:	8771
+=== TOTAL DELETIONS:	7396
+=== TOTAL SUBSTITUTIONS:	19691
+=== TOTAL NCHANGE:	35858
+=== TOTAL TRUE WORD COUNT:	106873
+=== TOTAL TEST WORD COUNT:	108248
+=== TOTAL TRUE WORDS RECALL:	0.747
+=== TOTAL TEST WORDS PRECISION:	0.737
+=== F MEASURE:	0.742
+=== OOV Rate:	0.026
+=== OOV Recall Rate:	0.285
+=== IV Recall Rate:	0.759
+Examples:
+扬帆  远东  做  与  中国  合作  的  先行  
+希腊的  经济  结构  较  特殊  。  
+海运  业  雄踞  全球  之首  ，  按  吨  位计  占  世界  总数的  １７％  。  
+另外  旅游  、  侨汇  也是  经济  收入  的  重要  组成  部分  ，  制造  业  规模  相对  较小  。  
+多年来  ，  中希  贸易  始终  处于  较低  的  水平  ，  希腊  几乎  没有  在  中国  投资  。  
+十几  年  来  ，  改革  开放  的  中国  经济  高速  发展  ，  远东  在  崛起  。  
+瓦西  里斯  的  船只  中  有  ４０％  驶向  远东  ，  每个月  几乎  都有  两  三条  船  停靠  中国  港口  。  
+他  感受  到了  中国  经济  发展  的  大潮  。  
+他  要与  中国  人  合作  。  
+他  来到  中国  ，  成为  第一  个  访华  的  大船  主  。  
+
+2019-04-03 20:54:06 INFO     Overwriting best checkpoint....
+2019-04-03 20:54:41 INFO     global_step = 500
+2019-04-03 20:54:41 INFO     unsupervised_loss = 5.119433
+2019-04-03 20:55:15 INFO     global_step = 600
+2019-04-03 20:55:15 INFO     unsupervised_loss = 5.044183
+2019-04-03 20:55:51 INFO     global_step = 700
+2019-04-03 20:55:51 INFO     unsupervised_loss = 4.955570
+2019-04-03 20:56:24 INFO     global_step = 800
+2019-04-03 20:56:24 INFO     unsupervised_loss = 4.874062
+2019-04-03 20:56:24 INFO     Saving checkpoint models/unsupervised-msr-3...
+2019-04-03 20:56:40 INFO     Bash Command: bash run.sh valid msr 3
+2019-04-03 20:56:57 INFO     Validation results:
+1.0.0
+=== SUMMARY:
+=== TOTAL INSERTIONS:	6351
+=== TOTAL DELETIONS:	10606
+=== TOTAL SUBSTITUTIONS:	20583
+=== TOTAL NCHANGE:	37540
+=== TOTAL TRUE WORD COUNT:	106873
+=== TOTAL TEST WORD COUNT:	102618
+=== TOTAL TRUE WORDS RECALL:	0.708
+=== TOTAL TEST WORDS PRECISION:	0.738
+=== F MEASURE:	0.723
+=== OOV Rate:	0.026
+=== OOV Recall Rate:	0.352
+=== IV Recall Rate:	0.718
+Examples:
+扬帆  远东  做  与  中国  合作  的  先行  
+希腊的  经济  结构  较  特殊  。  
+海运  业  雄踞  全球  之首  ，  按吨  位计占  世界  总数的  １７％  。  
+另外  旅游  、  侨汇  也是  经济  收入  的  重要  组成  部分  ，  制造  业  规模  相对  较小  。  
+多年来  ，  中希  贸易  始终  处于  较低的  水平  ，  希腊  几乎  没有  在  中国  投资  。  
+十几  年来  ，  改革  开放  的  中国  经济  高速  发展  ，  远东  在  崛起  。  
+瓦西  里斯  的  船只  中  有  ４０％  驶向  远东  ，  每个月  几乎  都有  两三条  船停靠  中国  港口  。  
+他感  受到了  中国  经济  发展  的  大潮  。  
+他  要与  中国  人  合作  。  
+他  来到  中国  ，  成为  第一个  访华  的  大船  主  。  
+
+2019-04-03 20:57:32 INFO     global_step = 900
+2019-04-03 20:57:32 INFO     unsupervised_loss = 4.810951
+2019-04-03 20:58:05 INFO     global_step = 1000
+2019-04-03 20:58:05 INFO     unsupervised_loss = 4.659166
+2019-04-03 20:58:39 INFO     global_step = 1100
+2019-04-03 20:58:39 INFO     unsupervised_loss = 4.584599
+2019-04-03 20:59:14 INFO     global_step = 1200
+2019-04-03 20:59:14 INFO     unsupervised_loss = 4.469627
+2019-04-03 20:59:14 INFO     Saving checkpoint models/unsupervised-msr-3...
+2019-04-03 20:59:30 INFO     Bash Command: bash run.sh valid msr 3
+2019-04-03 20:59:45 INFO     Validation results:
+1.0.0
+=== SUMMARY:
+=== TOTAL INSERTIONS:	8042
+=== TOTAL DELETIONS:	7605
+=== TOTAL SUBSTITUTIONS:	18136
+=== TOTAL NCHANGE:	33783
+=== TOTAL TRUE WORD COUNT:	106873
+=== TOTAL TEST WORD COUNT:	107310
+=== TOTAL TRUE WORDS RECALL:	0.759
+=== TOTAL TEST WORDS PRECISION:	0.756
+=== F MEASURE:	0.758
+=== OOV Rate:	0.026
+=== OOV Recall Rate:	0.317
+=== IV Recall Rate:	0.771
+Examples:
+扬帆  远东  做  与  中国  合作  的  先行  
+希腊  的  经济  结构  较  特殊  。  
+海运  业  雄踞  全球  之首  ，  按吨  位计  占  世界  总数  的  １７％  。  
+另外  旅游  、  侨汇  也是  经济  收入  的  重要  组成  部分  ，  制造  业  规模  相对  较小  。  
+多年  来  ，  中希  贸易  始终  处于  较低  的  水平  ，  希腊  几乎  没有  在  中国  投资  。  
+十几年  来  ，  改革  开放  的  中国  经济  高速  发展  ，  远东  在  崛起  。  
+瓦西  里斯  的  船只  中  有  ４０％  驶向  远东  ，  每  个月  几乎  都有  两三条  船  停靠  中国  港口  。  
+他  感受到  了  中国  经济  发展  的  大潮  。  
+他  要  与  中国  人  合作  。  
+他  来到  中国  ，  成为  第一个  访华  的  大船  主  。  
+
+2019-04-03 20:59:45 INFO     Overwriting best checkpoint....
+2019-04-03 21:00:18 INFO     global_step = 1300
+2019-04-03 21:00:18 INFO     unsupervised_loss = 4.434684
+2019-04-03 21:00:53 INFO     global_step = 1400
+2019-04-03 21:00:53 INFO     unsupervised_loss = 4.406349
+2019-04-03 21:01:26 INFO     global_step = 1500
+2019-04-03 21:01:26 INFO     unsupervised_loss = 4.359495
+2019-04-03 21:02:03 INFO     global_step = 1600
+2019-04-03 21:02:03 INFO     unsupervised_loss = 4.356160
+2019-04-03 21:02:03 INFO     Saving checkpoint models/unsupervised-msr-3...
+2019-04-03 21:02:18 INFO     Bash Command: bash run.sh valid msr 3
+2019-04-03 21:02:38 INFO     Validation results:
+1.0.0
+=== SUMMARY:
+=== TOTAL INSERTIONS:	8934
+=== TOTAL DELETIONS:	6584
+=== TOTAL SUBSTITUTIONS:	17242
+=== TOTAL NCHANGE:	32760
+=== TOTAL TRUE WORD COUNT:	106873
+=== TOTAL TEST WORD COUNT:	109223
+=== TOTAL TRUE WORDS RECALL:	0.777
+=== TOTAL TEST WORDS PRECISION:	0.760
+=== F MEASURE:	0.769
+=== OOV Rate:	0.026
+=== OOV Recall Rate:	0.302
+=== IV Recall Rate:	0.790
+Examples:
+扬帆  远东  做  与  中国  合作  的  先行  
+希腊  的  经济  结构  较  特殊  。  
+海运  业  雄踞  全球  之首  ，  按吨  位计  占  世界  总数  的  １７％  。  
+另外  旅游  、  侨汇  也是  经济  收入  的  重要  组成  部分  ，  制造  业  规模  相对  较小  。  
+多年  来  ，  中希  贸易  始终  处于  较低  的  水平  ，  希腊  几乎  没有  在  中国  投资  。  
+十几  年  来  ，  改革  开放  的  中国  经济  高速  发展  ，  远东  在  崛起  。  
+瓦西  里斯的  船只  中  有  ４０％  驶向  远东  ，  每  个月  几乎  都  有  两三  条船  停靠  中国  港口  。  
+他  感受到  了  中国  经济  发展  的  大潮  。  
+他  要  与  中国  人  合作  。  
+他  来到  中国  ，  成为  第一个  访华  的  大船主  。  
+
+2019-04-03 21:02:38 INFO     Overwriting best checkpoint....
+2019-04-03 21:03:11 INFO     global_step = 1700
+2019-04-03 21:03:11 INFO     unsupervised_loss = 4.325960
+2019-04-03 21:03:47 INFO     global_step = 1800
+2019-04-03 21:03:47 INFO     unsupervised_loss = 4.299318
+2019-04-03 21:04:21 INFO     global_step = 1900
+2019-04-03 21:04:21 INFO     unsupervised_loss = 4.263795
+2019-04-03 21:04:55 INFO     global_step = 2000
+2019-04-03 21:04:55 INFO     unsupervised_loss = 4.289760
+2019-04-03 21:04:55 INFO     Saving checkpoint models/unsupervised-msr-3...
+2019-04-03 21:05:10 INFO     Bash Command: bash run.sh valid msr 3
+2019-04-03 21:05:29 INFO     Validation results:
+1.0.0
+=== SUMMARY:
+=== TOTAL INSERTIONS:	9483
+=== TOTAL DELETIONS:	6304
+=== TOTAL SUBSTITUTIONS:	17277
+=== TOTAL NCHANGE:	33064
+=== TOTAL TRUE WORD COUNT:	106873
+=== TOTAL TEST WORD COUNT:	110052
+=== TOTAL TRUE WORDS RECALL:	0.779
+=== TOTAL TEST WORDS PRECISION:	0.757
+=== F MEASURE:	0.768
+=== OOV Rate:	0.026
+=== OOV Recall Rate:	0.284
+=== IV Recall Rate:	0.793
+Examples:
+扬帆  远东  做  与  中国  合作  的  先行  
+希腊  的  经济  结构  较  特殊  。  
+海运  业  雄踞  全球  之首  ，  按  吨位  计占  世界  总数  的  １７％  。  
+另外  旅游  、  侨汇  也  是  经济  收入  的  重要  组成  部分  ，  制造  业  规模  相对  较小  。  
+多年  来  ，  中希  贸易  始终  处于  较低  的  水平  ，  希腊  几乎  没有  在  中国  投资  。  
+十几  年  来  ，  改革  开放  的  中国  经济  高速  发展  ，  远东  在  崛起  。  
+瓦西  里斯  的  船只  中  有  ４０％  驶向  远东  ，  每  个月  几乎  都  有  两三  条船  停靠  中国  港口  。  
+他  感受到  了  中国  经济  发展  的  大潮  。  
+他  要  与  中国  人  合作  。  
+他  来到  中国  ，  成为  第一  个  访华  的  大船主  。  
+
+2019-04-03 21:06:02 INFO     global_step = 2100
+2019-04-03 21:06:02 INFO     unsupervised_loss = 4.275281
+2019-04-03 21:06:38 INFO     global_step = 2200
+2019-04-03 21:06:38 INFO     unsupervised_loss = 4.267119
+2019-04-03 21:07:11 INFO     global_step = 2300
+2019-04-03 21:07:11 INFO     unsupervised_loss = 4.234000
+2019-04-03 21:07:45 INFO     global_step = 2400
+2019-04-03 21:07:45 INFO     unsupervised_loss = 4.237754
+2019-04-03 21:07:45 INFO     Saving checkpoint models/unsupervised-msr-3...
+2019-04-03 21:08:02 INFO     Bash Command: bash run.sh valid msr 3
+2019-04-03 21:08:22 INFO     Validation results:
+1.0.0
+=== SUMMARY:
+=== TOTAL INSERTIONS:	9492
+=== TOTAL DELETIONS:	6079
+=== TOTAL SUBSTITUTIONS:	17106
+=== TOTAL NCHANGE:	32677
+=== TOTAL TRUE WORD COUNT:	106873
+=== TOTAL TEST WORD COUNT:	110286
+=== TOTAL TRUE WORDS RECALL:	0.783
+=== TOTAL TEST WORDS PRECISION:	0.759
+=== F MEASURE:	0.771
+=== OOV Rate:	0.026
+=== OOV Recall Rate:	0.279
+=== IV Recall Rate:	0.797
+Examples:
+扬帆  远东  做  与  中国  合作  的  先行  
+希腊  的  经济  结构  较  特殊  。  
+海运  业  雄踞  全球  之首  ，  按  吨位  计占  世界  总数  的  １７％  。  
+另外  旅游  、  侨汇  也  是  经济  收入  的  重要  组成  部分  ，  制造  业  规模  相对  较小  。  
+多年  来  ，  中希  贸易  始终  处于  较低  的  水平  ，  希腊  几乎  没有  在  中国  投资  。  
+十几  年  来  ，  改革  开放  的  中国  经济  高速  发展  ，  远东  在  崛起  。  
+瓦  西里斯  的  船只  中  有  ４０％  驶向  远东  ，  每  个月  几乎  都  有  两三  条  船  停靠  中国  港口  。  
+他  感受到  了  中国  经济  发展  的  大潮  。  
+他  要  与  中国  人  合作  。  
+他  来到  中国  ，  成为  第一  个  访华  的  大船主  。  
+
+2019-04-03 21:08:22 INFO     Overwriting best checkpoint....
+2019-04-03 21:08:54 INFO     global_step = 2500
+2019-04-03 21:08:54 INFO     unsupervised_loss = 4.213693
+2019-04-03 21:09:28 INFO     global_step = 2600
+2019-04-03 21:09:28 INFO     unsupervised_loss = 4.205739
+2019-04-03 21:10:02 INFO     global_step = 2700
+2019-04-03 21:10:02 INFO     unsupervised_loss = 4.238035
+2019-04-03 21:10:37 INFO     global_step = 2800
+2019-04-03 21:10:37 INFO     unsupervised_loss = 4.228696
+2019-04-03 21:10:37 INFO     Saving checkpoint models/unsupervised-msr-3...
+2019-04-03 21:10:52 INFO     Bash Command: bash run.sh valid msr 3
+2019-04-03 21:11:11 INFO     Validation results:
+1.0.0
+=== SUMMARY:
+=== TOTAL INSERTIONS:	9729
+=== TOTAL DELETIONS:	5740
+=== TOTAL SUBSTITUTIONS:	16585
+=== TOTAL NCHANGE:	32054
+=== TOTAL TRUE WORD COUNT:	106873
+=== TOTAL TEST WORD COUNT:	110862
+=== TOTAL TRUE WORDS RECALL:	0.791
+=== TOTAL TEST WORDS PRECISION:	0.763
+=== F MEASURE:	0.777
+=== OOV Rate:	0.026
+=== OOV Recall Rate:	0.272
+=== IV Recall Rate:	0.805
+Examples:
+扬帆  远东  做  与  中国  合作  的  先行  
+希腊  的  经济  结构  较  特殊  。  
+海运  业  雄踞  全球  之首  ，  按  吨位  计占  世界  总数  的  １７％  。  
+另外  旅游  、  侨汇  也  是  经济  收入  的  重要  组成  部分  ，  制造  业  规模  相对  较小  。  
+多年  来  ，  中希  贸易  始终  处于  较低  的  水平  ，  希腊  几乎  没有  在  中国  投资  。  
+十几  年  来  ，  改革  开放的  中国  经济  高速  发展  ，  远东  在  崛起  。  
+瓦  西里斯  的  船只  中  有  ４０％  驶向  远东  ，  每  个月  几乎  都  有  两三  条  船  停靠  中国  港口  。  
+他  感受到  了  中国  经济  发展  的  大潮  。  
+他  要  与  中国  人  合作  。  
+他  来到  中国  ，  成为  第一  个  访华  的  大  船主  。  
+
+2019-04-03 21:11:11 INFO     Overwriting best checkpoint....
+2019-04-03 21:11:46 INFO     global_step = 2900
+2019-04-03 21:11:46 INFO     unsupervised_loss = 4.228991
+2019-04-03 21:12:20 INFO     global_step = 3000
+2019-04-03 21:12:20 INFO     unsupervised_loss = 4.199770
+2019-04-03 21:12:53 INFO     global_step = 3100
+2019-04-03 21:12:53 INFO     unsupervised_loss = 4.214847
+2019-04-03 21:13:28 INFO     global_step = 3200
+2019-04-03 21:13:28 INFO     unsupervised_loss = 4.196003
+2019-04-03 21:13:28 INFO     Saving checkpoint models/unsupervised-msr-3...
+2019-04-03 21:13:43 INFO     Bash Command: bash run.sh valid msr 3
+2019-04-03 21:14:04 INFO     Validation results:
+1.0.0
+=== SUMMARY:
+=== TOTAL INSERTIONS:	9851
+=== TOTAL DELETIONS:	5551
+=== TOTAL SUBSTITUTIONS:	16456
+=== TOTAL NCHANGE:	31858
+=== TOTAL TRUE WORD COUNT:	106873
+=== TOTAL TEST WORD COUNT:	111173
+=== TOTAL TRUE WORDS RECALL:	0.794
+=== TOTAL TEST WORDS PRECISION:	0.763
+=== F MEASURE:	0.778
+=== OOV Rate:	0.026
+=== OOV Recall Rate:	0.275
+=== IV Recall Rate:	0.808
+Examples:
+扬帆  远东  做  与  中国  合作  的  先行  
+希腊  的  经济  结构  较  特殊  。  
+海运  业  雄踞  全球  之首  ，  按  吨位  计占  世界  总数  的  １７％  。  
+另外  旅游  、  侨汇  也  是  经济  收入  的  重要  组成  部分  ，  制造  业  规模  相对  较小  。  
+多年  来  ，  中希  贸易  始终  处于  较低  的  水平  ，  希腊  几乎  没有  在  中国  投资  。  
+十几  年  来  ，  改革  开放  的  中国  经济  高速  发展  ，  远东  在  崛起  。  
+瓦西  里斯  的  船只  中  有  ４０％  驶向  远东  ，  每  个月  几乎  都  有  两三  条  船  停靠  中国  港口  。  
+他  感受到  了  中国  经济  发展  的  大潮  。  
+他  要  与  中国  人  合作  。  
+他  来到  中国  ，  成为  第一  个  访华  的  大  船主  。  
+
+2019-04-03 21:14:04 INFO     Overwriting best checkpoint....
+2019-04-03 21:14:38 INFO     global_step = 3300
+2019-04-03 21:14:38 INFO     unsupervised_loss = 4.189335
+2019-04-03 21:15:12 INFO     global_step = 3400
+2019-04-03 21:15:12 INFO     unsupervised_loss = 4.171864
+2019-04-03 21:15:45 INFO     global_step = 3500
+2019-04-03 21:15:45 INFO     unsupervised_loss = 4.157161
+2019-04-03 21:16:20 INFO     global_step = 3600
+2019-04-03 21:16:20 INFO     unsupervised_loss = 4.181711
+2019-04-03 21:16:20 INFO     Saving checkpoint models/unsupervised-msr-3...
+2019-04-03 21:16:35 INFO     Bash Command: bash run.sh valid msr 3
+2019-04-03 21:16:53 INFO     Validation results:
+1.0.0
+=== SUMMARY:
+=== TOTAL INSERTIONS:	10236
+=== TOTAL DELETIONS:	5290
+=== TOTAL SUBSTITUTIONS:	16380
+=== TOTAL NCHANGE:	31906
+=== TOTAL TRUE WORD COUNT:	106873
+=== TOTAL TEST WORD COUNT:	111819
+=== TOTAL TRUE WORDS RECALL:	0.797
+=== TOTAL TEST WORDS PRECISION:	0.762
+=== F MEASURE:	0.779
+=== OOV Rate:	0.026
+=== OOV Recall Rate:	0.264
+=== IV Recall Rate:	0.812
+Examples:
+扬帆  远东  做  与  中国  合作  的  先行  
+希腊  的  经济  结构  较  特殊  。  
+海运  业  雄踞  全球  之首  ，  按  吨位  计占  世界  总数  的  １７％  。  
+另外  旅游  、  侨汇  也  是  经济  收入  的  重要  组成  部分  ，  制造  业  规模  相对  较小  。  
+多年  来  ，  中希  贸易  始终  处于  较低  的  水平  ，  希腊  几乎  没有  在  中国  投资  。  
+十几  年  来  ，  改革  开放  的  中国  经济  高速  发展  ，  远东  在  崛起  。  
+瓦  西里  斯  的  船只  中  有  ４０％  驶向  远东  ，  每  个月  几乎  都  有  两  三  条  船停靠  中国  港口  。  
+他  感受到  了  中国  经济  发展  的  大潮  。  
+他  要  与  中国  人  合作  。  
+他  来到  中国  ，  成为  第一  个  访华  的  大  船主  。  
+
+2019-04-03 21:16:53 INFO     Overwriting best checkpoint....
+2019-04-03 21:17:26 INFO     global_step = 3700
+2019-04-03 21:17:26 INFO     unsupervised_loss = 4.151152
+2019-04-03 21:18:02 INFO     global_step = 3800
+2019-04-03 21:18:02 INFO     unsupervised_loss = 4.187288
+2019-04-03 21:18:36 INFO     global_step = 3900
+2019-04-03 21:18:36 INFO     unsupervised_loss = 4.181364
+2019-04-03 21:19:12 INFO     global_step = 4000
+2019-04-03 21:19:12 INFO     unsupervised_loss = 4.175279
+2019-04-03 21:19:12 INFO     Saving checkpoint models/unsupervised-msr-3...
+2019-04-03 21:19:28 INFO     Bash Command: bash run.sh valid msr 3
+2019-04-03 21:19:46 INFO     Validation results:
+1.0.0
+=== SUMMARY:
+=== TOTAL INSERTIONS:	10459
+=== TOTAL DELETIONS:	5140
+=== TOTAL SUBSTITUTIONS:	16200
+=== TOTAL NCHANGE:	31799
+=== TOTAL TRUE WORD COUNT:	106873
+=== TOTAL TEST WORD COUNT:	112192
+=== TOTAL TRUE WORDS RECALL:	0.800
+=== TOTAL TEST WORDS PRECISION:	0.762
+=== F MEASURE:	0.781
+=== OOV Rate:	0.026
+=== OOV Recall Rate:	0.255
+=== IV Recall Rate:	0.815
+Examples:
+扬帆  远东  做  与  中国  合作  的  先行  
+希腊  的  经济  结构  较  特殊  。  
+海运  业雄  踞  全球  之首  ，  按  吨  位计  占  世界  总数  的  １７％  。  
+另外  旅游  、  侨汇  也  是  经济  收入  的  重要  组成  部分  ，  制造  业  规模  相对  较小  。  
+多年  来  ，  中希  贸易  始终  处于  较低  的  水平  ，  希腊  几乎  没有  在  中国  投资  。  
+十几  年  来  ，  改革  开放  的  中国  经济  高速  发展  ，  远东  在  崛起  。  
+瓦  西里斯  的  船只  中  有  ４０％  驶向  远东  ，  每  个月  几乎  都  有  两三  条  船  停靠  中国  港口  。  
+他  感受到  了  中国  经济  发展  的  大潮  。  
+他  要  与  中国  人  合作  。  
+他  来到  中国  ，  成为  第一  个  访华  的  大  船主  。  
+
+2019-04-03 21:19:46 INFO     Overwriting best checkpoint....
+2019-04-03 21:20:20 INFO     global_step = 4100
+2019-04-03 21:20:20 INFO     unsupervised_loss = 4.190448
+2019-04-03 21:20:55 INFO     global_step = 4200
+2019-04-03 21:20:55 INFO     unsupervised_loss = 4.167780
+2019-04-03 21:21:28 INFO     global_step = 4300
+2019-04-03 21:21:28 INFO     unsupervised_loss = 4.163022
+2019-04-03 21:22:04 INFO     global_step = 4400
+2019-04-03 21:22:04 INFO     unsupervised_loss = 4.160747
+2019-04-03 21:22:04 INFO     Saving checkpoint models/unsupervised-msr-3...
+2019-04-03 21:22:19 INFO     Bash Command: bash run.sh valid msr 3
+2019-04-03 21:22:38 INFO     Validation results:
+1.0.0
+=== SUMMARY:
+=== TOTAL INSERTIONS:	10407
+=== TOTAL DELETIONS:	5080
+=== TOTAL SUBSTITUTIONS:	16237
+=== TOTAL NCHANGE:	31724
+=== TOTAL TRUE WORD COUNT:	106873
+=== TOTAL TEST WORD COUNT:	112200
+=== TOTAL TRUE WORDS RECALL:	0.801
+=== TOTAL TEST WORDS PRECISION:	0.763
+=== F MEASURE:	0.781
+=== OOV Rate:	0.026
+=== OOV Recall Rate:	0.259
+=== IV Recall Rate:	0.815
+Examples:
+扬帆  远东  做  与  中国  合作  的  先行  
+希腊  的  经济  结构  较  特殊  。  
+海运  业雄  踞  全球  之首  ，  按  吨  位计  占  世界  总数  的  １７％  。  
+另外  旅游  、  侨汇  也  是  经济  收入  的  重要  组成  部分  ，  制造  业  规模  相对  较小  。  
+多年  来  ，  中希  贸易  始终  处于  较低  的  水平  ，  希腊  几乎  没有  在  中国  投资  。  
+十几  年  来  ，  改革  开放  的  中国  经济  高速  发展  ，  远东  在  崛起  。  
+瓦西  里斯  的  船只  中  有  ４０％  驶向  远东  ，  每  个月  几乎  都  有  两三  条  船停靠  中国  港口  。  
+他  感受到  了  中国  经济  发展  的  大潮  。  
+他  要  与  中国  人  合作  。  
+他  来到  中国  ，  成为  第一  个  访华  的  大  船主  。  
+
+2019-04-03 21:23:11 INFO     global_step = 4500
+2019-04-03 21:23:11 INFO     unsupervised_loss = 4.160997
+2019-04-03 21:23:46 INFO     global_step = 4600
+2019-04-03 21:23:46 INFO     unsupervised_loss = 4.150141
+2019-04-03 21:24:20 INFO     global_step = 4700
+2019-04-03 21:24:20 INFO     unsupervised_loss = 4.156954
+2019-04-03 21:24:56 INFO     global_step = 4800
+2019-04-03 21:24:56 INFO     unsupervised_loss = 4.153807
+2019-04-03 21:24:56 INFO     Saving checkpoint models/unsupervised-msr-3...
+2019-04-03 21:25:11 INFO     Bash Command: bash run.sh valid msr 3
+2019-04-03 21:25:32 INFO     Validation results:
+1.0.0
+=== SUMMARY:
+=== TOTAL INSERTIONS:	10582
+=== TOTAL DELETIONS:	4968
+=== TOTAL SUBSTITUTIONS:	16084
+=== TOTAL NCHANGE:	31634
+=== TOTAL TRUE WORD COUNT:	106873
+=== TOTAL TEST WORD COUNT:	112487
+=== TOTAL TRUE WORDS RECALL:	0.803
+=== TOTAL TEST WORDS PRECISION:	0.763
+=== F MEASURE:	0.782
+=== OOV Rate:	0.026
+=== OOV Recall Rate:	0.259
+=== IV Recall Rate:	0.818
+Examples:
+扬帆  远东  做  与  中国  合作  的  先行  
+希腊  的  经济  结构  较  特殊  。  
+海运  业  雄踞  全球  之首  ，  按  吨  位计  占  世界  总数  的  １７％  。  
+另外  旅游  、  侨汇  也  是  经济  收入  的  重要  组成  部分  ，  制造  业  规模  相对  较小  。  
+多年  来  ，  中希  贸易  始终  处于  较低  的  水平  ，  希腊  几乎  没有  在  中国  投资  。  
+十几  年  来  ，  改革  开放  的  中国  经济  高速  发展  ，  远东  在  崛起  。  
+瓦西  里斯  的  船只  中  有  ４０％  驶向  远东  ，  每  个月  几乎  都  有  两三  条  船  停靠  中国  港口  。  
+他  感受到  了  中国  经济  发展  的  大潮  。  
+他  要  与  中国  人  合作  。  
+他  来到  中国  ，  成为  第一  个  访华  的  大船  主  。  
+
+2019-04-03 21:25:32 INFO     Overwriting best checkpoint....
+2019-04-03 21:26:05 INFO     global_step = 4900
+2019-04-03 21:26:05 INFO     unsupervised_loss = 4.123102
+2019-04-03 21:26:39 INFO     global_step = 5000
+2019-04-03 21:26:39 INFO     unsupervised_loss = 4.114799
+2019-04-03 21:27:13 INFO     global_step = 5100
+2019-04-03 21:27:13 INFO     unsupervised_loss = 4.089600
+2019-04-03 21:27:48 INFO     global_step = 5200
+2019-04-03 21:27:48 INFO     unsupervised_loss = 4.075359
+2019-04-03 21:27:48 INFO     Saving checkpoint models/unsupervised-msr-3...
+2019-04-03 21:28:02 INFO     Bash Command: bash run.sh valid msr 3
+2019-04-03 21:28:18 INFO     Validation results:
+1.0.0
+=== SUMMARY:
+=== TOTAL INSERTIONS:	10860
+=== TOTAL DELETIONS:	4827
+=== TOTAL SUBSTITUTIONS:	16048
+=== TOTAL NCHANGE:	31735
+=== TOTAL TRUE WORD COUNT:	106873
+=== TOTAL TEST WORD COUNT:	112906
+=== TOTAL TRUE WORDS RECALL:	0.805
+=== TOTAL TEST WORDS PRECISION:	0.762
+=== F MEASURE:	0.783
+=== OOV Rate:	0.026
+=== OOV Recall Rate:	0.256
+=== IV Recall Rate:	0.820
+Examples:
+扬帆  远东  做  与  中国  合作  的  先行  
+希腊  的  经济  结构  较  特殊  。  
+海运  业  雄踞  全球  之首  ，  按  吨  位计  占  世界  总数  的  １７％  。  
+另外  旅游  、  侨汇  也  是  经济  收入  的  重要  组成  部分  ，  制造  业  规模  相对  较小  。  
+多年  来  ，  中希  贸易  始终  处于  较低  的  水平  ，  希腊  几乎  没有  在  中国  投资  。  
+十几  年  来  ，  改革  开放  的  中国  经济  高速  发展  ，  远东  在  崛起  。  
+瓦西  里斯  的  船只  中  有  ４０％  驶向  远东  ，  每  个月  几乎  都  有  两三  条  船  停靠  中国  港口  。  
+他  感受到  了  中国  经济  发展  的  大潮  。  
+他  要  与  中国  人  合作  。  
+他  来到  中国  ，  成为  第一  个  访华  的  大  船主  。  
+
+2019-04-03 21:28:18 INFO     Overwriting best checkpoint....
+2019-04-03 21:28:52 INFO     global_step = 5300
+2019-04-03 21:28:52 INFO     unsupervised_loss = 4.062728
+2019-04-03 21:29:26 INFO     global_step = 5400
+2019-04-03 21:29:26 INFO     unsupervised_loss = 4.065257
+2019-04-03 21:30:01 INFO     global_step = 5500
+2019-04-03 21:30:01 INFO     unsupervised_loss = 4.066559
+2019-04-03 21:30:34 INFO     global_step = 5600
+2019-04-03 21:30:34 INFO     unsupervised_loss = 4.060166
+2019-04-03 21:30:34 INFO     Saving checkpoint models/unsupervised-msr-3...
+2019-04-03 21:30:50 INFO     Bash Command: bash run.sh valid msr 3
+2019-04-03 21:31:06 INFO     Validation results:
+1.0.0
+=== SUMMARY:
+=== TOTAL INSERTIONS:	10757
+=== TOTAL DELETIONS:	4871
+=== TOTAL SUBSTITUTIONS:	16021
+=== TOTAL NCHANGE:	31649
+=== TOTAL TRUE WORD COUNT:	106873
+=== TOTAL TEST WORD COUNT:	112759
+=== TOTAL TRUE WORDS RECALL:	0.805
+=== TOTAL TEST WORDS PRECISION:	0.763
+=== F MEASURE:	0.783
+=== OOV Rate:	0.026
+=== OOV Recall Rate:	0.259
+=== IV Recall Rate:	0.819
+Examples:
+扬帆  远东  做  与  中国  合作  的  先行  
+希腊  的  经济  结构  较  特殊  。  
+海运  业  雄踞  全球  之首  ，  按  吨  位计  占  世界  总数  的  １７％  。  
+另外  旅游  、  侨汇  也  是  经济  收入  的  重要  组成  部分  ，  制造  业  规模  相对  较小  。  
+多年  来  ，  中希  贸易  始终  处于  较低  的  水平  ，  希腊  几乎  没有  在  中国  投资  。  
+十几  年  来  ，  改革  开放  的  中国  经济  高速  发展  ，  远东  在  崛起  。  
+瓦西  里斯  的  船只  中  有  ４０％  驶向  远东  ，  每  个月  几乎  都  有  两三  条  船  停靠  中国  港口  。  
+他  感受到  了  中国  经济  发展  的  大潮  。  
+他  要  与  中国  人  合作  。  
+他  来到  中国  ，  成为  第一  个  访华  的  大  船主  。  
+
+2019-04-03 21:31:40 INFO     global_step = 5700
+2019-04-03 21:31:40 INFO     unsupervised_loss = 4.063722
+2019-04-03 21:32:14 INFO     global_step = 5800
+2019-04-03 21:32:14 INFO     unsupervised_loss = 4.052481
+2019-04-03 21:32:47 INFO     global_step = 5900
+2019-04-03 21:32:47 INFO     unsupervised_loss = 4.042895
+2019-04-03 21:33:20 INFO     Saving checkpoint models/unsupervised-msr-3...
+2019-04-03 21:33:35 INFO     Bash Command: bash run.sh valid msr 3
+2019-04-03 21:33:50 INFO     Validation results:
+1.0.0
+=== SUMMARY:
+=== TOTAL INSERTIONS:	10784
+=== TOTAL DELETIONS:	4801
+=== TOTAL SUBSTITUTIONS:	15989
+=== TOTAL NCHANGE:	31574
+=== TOTAL TRUE WORD COUNT:	106873
+=== TOTAL TEST WORD COUNT:	112856
+=== TOTAL TRUE WORDS RECALL:	0.805
+=== TOTAL TEST WORDS PRECISION:	0.763
+=== F MEASURE:	0.784
+=== OOV Rate:	0.026
+=== OOV Recall Rate:	0.258
+=== IV Recall Rate:	0.820
+Examples:
+扬帆  远东  做  与  中国  合作  的  先行  
+希腊  的  经济  结构  较  特殊  。  
+海运  业  雄踞  全球  之首  ，  按  吨  位计  占  世界  总数  的  １７％  。  
+另外  旅游  、  侨汇  也  是  经济  收入  的  重要  组成  部分  ，  制造  业  规模  相对  较小  。  
+多年  来  ，  中希  贸易  始终  处于  较低  的  水平  ，  希腊  几乎  没有  在  中国  投资  。  
+十几  年  来  ，  改革  开放  的  中国  经济  高速  发展  ，  远东  在  崛起  。  
+瓦西  里斯  的  船只  中  有  ４０％  驶向  远东  ，  每  个月  几乎  都  有  两三  条  船  停靠  中国  港口  。  
+他  感受到  了  中国  经济  发展  的  大潮  。  
+他  要  与  中国  人  合作  。  
+他  来到  中国  ，  成为  第一  个  访华  的  大  船主  。  
+
+2019-04-03 21:33:50 INFO     Overwriting best checkpoint....
+2019-04-03 21:33:50 INFO     Prepare prediction dataloader
+2019-04-03 21:33:52 INFO     #line: 3985
+2019-04-03 21:33:52 INFO     #sentence: 12820
+2019-04-03 21:33:52 INFO     #token: 205820
+2019-04-03 21:33:53 INFO     ##########Example 0##########
+2019-04-03 21:33:53 INFO     Characters: <BOS> 扬 帆 远 东 做 与 中 国 合 作 的 先 行 <\n>
+2019-04-03 21:33:53 INFO     Tokens: <BOS> 扬 帆 远 东 做 与 中 国 合 作 的 先 行 </s>
+2019-04-03 21:33:53 INFO     Segments: 13
+2019-04-03 21:33:53 INFO     ##########Example 1##########
+2019-04-03 21:33:53 INFO     Characters: <BOS> 希 腊 的 经 济 结 构 较 特 殊 。 <\n>
+2019-04-03 21:33:53 INFO     Tokens: <BOS> 希 腊 的 经 济 结 构 较 特 殊 <PUNC> </s>
+2019-04-03 21:33:53 INFO     Segments: 11
+2019-04-03 21:33:53 INFO     ##########Example 2##########
+2019-04-03 21:33:53 INFO     Characters: <BOS> 海 运 业 雄 踞 全 球 之 首 ， 
+2019-04-03 21:33:53 INFO     Tokens: <BOS> 海 运 业 雄 踞 全 球 之 首 <PUNC> </s>
+2019-04-03 21:33:53 INFO     Segments: 10
+2019-04-03 21:33:53 INFO     ##########Example 3##########
+2019-04-03 21:33:53 INFO     Characters: <BOS> 按 吨 位 计 占 世 界 总 数 的 １７％ 。 <\n>
+2019-04-03 21:33:53 INFO     Tokens: <BOS> 按 吨 位 计 占 世 界 总 数 的 <NUM> <PUNC> </s>
+2019-04-03 21:33:53 INFO     Segments: 12
+2019-04-03 21:33:53 INFO     ##########Example 4##########
+2019-04-03 21:33:53 INFO     Characters: <BOS> 另 外 旅 游 、 侨 汇 也 是 经 济 收 入 的 重 要 组 成 部 分 ， 
+2019-04-03 21:33:53 INFO     Tokens: <BOS> 另 外 旅 游 <PUNC> 侨 汇 也 是 经 济 收 入 的 重 要 组 成 部 分 <PUNC> </s>
+2019-04-03 21:33:53 INFO     Segments: 21
+2019-04-03 21:33:53 INFO     ##########Example 5##########
+2019-04-03 21:33:53 INFO     Characters: <BOS> 制 造 业 规 模 相 对 较 小 。 <\n>
+2019-04-03 21:33:53 INFO     Tokens: <BOS> 制 造 业 规 模 相 对 较 小 <PUNC> </s>
+2019-04-03 21:33:53 INFO     Segments: 10
+2019-04-03 21:33:53 INFO     ##########Example 6##########
+2019-04-03 21:33:53 INFO     Characters: <BOS> 多 年 来 ， 
+2019-04-03 21:33:53 INFO     Tokens: <BOS> 多 年 来 <PUNC> </s>
+2019-04-03 21:33:53 INFO     Segments: 4
+2019-04-03 21:33:53 INFO     ##########Example 7##########
+2019-04-03 21:33:53 INFO     Characters: <BOS> 中 希 贸 易 始 终 处 于 较 低 的 水 平 ， 
+2019-04-03 21:33:53 INFO     Tokens: <BOS> 中 希 贸 易 始 终 处 于 较 低 的 水 平 <PUNC> </s>
+2019-04-03 21:33:53 INFO     Segments: 14
+2019-04-03 21:33:53 INFO     ##########Example 8##########
+2019-04-03 21:33:53 INFO     Characters: <BOS> 希 腊 几 乎 没 有 在 中 国 投 资 。 <\n>
+2019-04-03 21:33:53 INFO     Tokens: <BOS> 希 腊 几 乎 没 有 在 中 国 投 资 <PUNC> </s>
+2019-04-03 21:33:53 INFO     Segments: 12
+2019-04-03 21:33:53 INFO     ##########Example 9##########
+2019-04-03 21:33:53 INFO     Characters: <BOS> 十 几 年 来 ， 
+2019-04-03 21:33:53 INFO     Tokens: <BOS> 十 几 年 来 <PUNC> </s>
+2019-04-03 21:33:53 INFO     Segments: 5
+2019-04-03 21:33:53 INFO     Loading checkpoint None...
+2019-04-03 21:33:53 INFO     Global step of best-checkpoint: 5999
+2019-04-03 21:34:08 INFO     Bash Command: bash run.sh eval msr 3
+2019-04-03 21:34:25 INFO     Test evaluation results:
+1.0.0
+=== SUMMARY:
+=== TOTAL INSERTIONS:	10784
+=== TOTAL DELETIONS:	4801
+=== TOTAL SUBSTITUTIONS:	15989
+=== TOTAL NCHANGE:	31574
+=== TOTAL TRUE WORD COUNT:	106873
+=== TOTAL TEST WORD COUNT:	112856
+=== TOTAL TRUE WORDS RECALL:	0.805
+=== TOTAL TEST WORDS PRECISION:	0.763
+=== F MEASURE:	0.784
+=== OOV Rate:	0.026
+=== OOV Recall Rate:	0.258
+=== IV Recall Rate:	0.820
+Examples:
+扬帆  远东  做  与  中国  合作  的  先行  
+希腊  的  经济  结构  较  特殊  。  
+海运  业  雄踞  全球  之首  ，  按  吨  位计  占  世界  总数  的  １７％  。  
+另外  旅游  、  侨汇  也  是  经济  收入  的  重要  组成  部分  ，  制造  业  规模  相对  较小  。  
+多年  来  ，  中希  贸易  始终  处于  较低  的  水平  ，  希腊  几乎  没有  在  中国  投资  。  
+十几  年  来  ，  改革  开放  的  中国  经济  高速  发展  ，  远东  在  崛起  。  
+瓦西  里斯  的  船只  中  有  ４０％  驶向  远东  ，  每  个月  几乎  都  有  两三  条  船  停靠  中国  港口  。  
+他  感受到  了  中国  经济  发展  的  大潮  。  
+他  要  与  中国  人  合作  。  
+他  来到  中国  ，  成为  第一  个  访华  的  大  船主  。  
+
